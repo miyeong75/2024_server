@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의록</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page3.css') }}" />
+    <script>
+        // 페이지 로드 시 실행되는 함수
+        function loadMeetingNotes() {
+            fetch('/api/notes')
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    var latestNote = data[data.length - 1]; // 가장 최근 데이터
+                    document.getElementById('titleDisplay').textContent = latestNote.Title;
+                    document.getElementById('contentDisplay').textContent = latestNote.Content;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data: ', error);
+            });
+}
+
+window.onload = loadMeetingNotes;
+      </script>
+  </head>
+<body>
+    <div style="width: 1480px; height: 1121px; position: relative; background: #fff;">
+        <div style="width: 1224px; height: 134px; position: absolute; left: 256px; top: 192px;">
+        <p
+            style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
+        >
+            회의록
+        </p>
+        <button class="button-hover-effect" onclick="window.location.href='/page1';">목록</button>
+        </div>
+        <div
+        style="width: 256px; height: 1121px; position: absolute; left: 0px; top: 0px; overflow: hidden; background: #fff; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 0px; border-left-width: 0px; border-color: #e0e0e0;"
+        >
+        <div
+            style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 240px; position: absolute; left: 8px; top: 78px; gap: 4px;"
+        >
+            <div
+            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px;"
+            >
+            <p
+                style="flex-grow: 0; flex-shrink: 0; width: 208px; height: 24px; font-size: 16px; font-weight: 600; text-align: left; color: #000;"
+            >
+                Team
+            </p>
+            </div>
+            <div
+            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px; background: #eefeff;"
+            >
+            <div
+                style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative; overflow: hidden;"
+            ></div>
+            <p
+                style="flex-grow: 1; width: 168px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
+            >
+                Project 1
+            </p>
+            </div>
+            <div
+            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px; background: #fff;"
+            >
+            <div
+                style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative; overflow: hidden;"
+            ></div>
+            <p
+                style="flex-grow: 1; width: 168px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
+            >
+                Prohect2
+            </p>
+            </div>
+        </div>
+        <p
+            style="position: absolute; left: 24px; top: 24px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
+        >
+            나보영
+        </p>
+        </div>
+        <p
+        style="position: absolute; left: 350px; top: 340px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
+        >
+        제목
+        </p>
+        <p
+        style="position: absolute; left: 350px; top: 627px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
+        >
+        내용
+        </p>
+        <div
+        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 705px; height: 462px; position: absolute; left: 404px; top: 408px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
+        >
+        <p id="contentDisplay"
+            style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; height: 500px; flex-grow: 1; width: 673px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
+>
+        </p>
+        </div>
+        <div
+        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 706px; position: absolute; left: 405px; top: 329px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
+        >
+        <p id="titleDisplay"
+            style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 100%; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
+        ></p>
+        </div>
+    </div>
+
+</body>
+</html>
