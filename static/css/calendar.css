@@ -1,0 +1,179 @@
+/* 스타일 리셋 */
+body, h1, div, ul, li, table, th, td, p {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-collapse: collapse;
+  box-sizing: border-box;
+}
+
+/* 전체 페이지 스타일 */
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* 헤더 스타일 */
+header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* 컨테이너 스타일 */
+#container {
+  display: flex;
+  flex: 1;
+}
+
+/* 사이드바 스타일 */
+#sidebar {
+  width: 10%;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+}
+
+/* 사이드바 아이템 스타일 */
+.nav-item {
+  margin: 10px 0;
+  padding: 10px;
+  color: #333;
+  transition: all 0.3s ease;
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 텍스트 색상을 상속 받음 */
+}
+
+.nav-item:hover, .nav-item.active {
+  color: #4a90e2;
+  border-left: 3px solid #4a90e2;
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+/* 메인 컨텐츠 스타일 */
+#content {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 캘린더 헤더 스타일 */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top-left-radius: 5px; /* 왼쪽 상단 모서리 둥글게 */
+  border-top-right-radius: 5px; /* 오른쪽 상단 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 898px; /* 캘린더와 동일한 너비로 설정 */
+  margin-top: 20px; /* 맨 위 타이틀과의 간격 추가 */
+}
+
+/* 달 넘기기 버튼 스타일 */
+.month-nav {
+  background-color: rgba(173, 216, 230, 0.3);
+  color: black;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.month-nav:hover {
+  background-color: #357ABD;
+}
+
+/* 현재 연도와 월 표시 스타일 */
+#month-display {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* 캘린더 스타일 */
+.calendar {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 900px;
+  height: 650px;
+  overflow-y: auto;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom-left-radius: 10px; /* 왼쪽 하단 모서리 둥글게 */
+  border-bottom-right-radius: 10px; /* 오른쪽 하단 모서리 둥글게 */
+}
+
+/* 캘린더 셀 스타일 */
+table.calendar th, table.calendar td {
+  border: 1px solid #ddd;
+  width: 14.28%; /* 7일에 맞춰서 폭 설정 */
+  height: 100px; /* 고정 높이 */
+  padding: 10px;
+  vertical-align: top;
+  overflow: hidden; /* 셀 내용이 넘치면 숨김 */
+  position: relative; /* 상대적 위치 지정 */
+  background-color: #fff; /* 배경색 흰색 */
+}
+
+/* 캘린더 셀 헤더 스타일 */
+table.calendar th {
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: bold;
+  height: 1rem; /* 기존 높이의 1/3로 설정 */
+}
+
+/* 날짜 표시 스타일 */
+.date-span {
+  display: block; /* 날짜도 독립된 라인을 차지하도록 변경 */
+  padding-top: 10px;
+}
+
+/* 이벤트를 담을 컨테이너 스타일 */
+.event-container {
+  min-height: 20px;
+  padding: 5px;
+  overflow: hidden;
+} 
+
+/* 오늘 날짜 칸 스타일 */
+.calendar td.today {
+  background-color: rgba(173, 216, 230, 0.3); /* 오늘 날짜의 배경색을 연한 lightblue로 설정 */
+}
+
+/* 이벤트 스타일 */
+.event {
+  background-color: lightblue;
+  border-radius: 4px;
+  padding: 2px 5px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-item {
+  display: block;
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+  line-height: 1.6; /* 조정할 수 있습니다 */
+}
+
+.nav-link {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 텍스트 색상을 상속 받음 */
+  display: block; /* 이 부분이 중요합니다 */
+}

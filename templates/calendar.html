@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskApp</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}">
+</head>
+<body>
+
+<header>
+  프로젝트 이름
+</header>
+
+<div id="container">
+  <div id="sidebar">
+    <a href="/todos" class="nav-item">할 일 목록</a>
+    <a href="/calendar" class="nav-item active">캘린더</a>
+    <div class="nav-item">게시판1</div>
+    <div class="nav-item">게시판2</div>
+  </div>
+  <div id="content">
+    <div class="calendar-header">
+      <button class="month-nav" onclick="changeMonth(-1)">◀</button>
+      <span class="month-display" id="month-display"></span>
+      <button class="month-nav" onclick="changeMonth(1)">▶</button>
+    </div>
+    <table class="calendar" id="calendar">
+      <!-- 캘린더 헤더가 동적으로 채워집니다 -->
+    </table>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+
+</body>
+</html>
