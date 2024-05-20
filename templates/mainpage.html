@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>팀 프로젝트 관리</title>
+    <link rel="stylesheet" href="../static/css/mainpage.css" />
+    <script src="../static/js/mainpage.js"></script>
+  </head>
+  <body>
+    <header>
+      <div>
+        <span>TeamTeam</span>
+      </div>
+      <div class="right-buttons">
+        <button>마이페이지</button>
+        <button>로그아웃</button>
+      </div>
+    </header>
+
+    <div class="project-list" id="projectList">
+      <h2>
+        팀 프로젝트 리스트
+        <button id="add-project-button" onclick="showAddProjectPopup()">
+          추가 +
+        </button>
+      </h2>
+      <!-- 프로젝트 목록 -->
+      {% for project in projects %}
+      <div class="project" data-project-id="{{ project.project_id }}">
+        <div class="project-info">
+          <div class="project-name">{{project.project_name}}</div>
+          <div class="project-members">팀원: {{ ', '.join(project.members) }}</div>
+          <div class="tag-container">
+            {% for tag in project.tags %}
+            <div class="tag">{{ tag }}</div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="dropdown project-options">
+          <button onclick="showDropdown(this)" style="border: none; background-color: transparent">⚙️</button>
+          <div class="dropdown-content">
+            <button onclick="showEditPopup(this)" onmouseover="this.style.backgroundColor='#ccc'"
+              onmouseout="this.style.backgroundColor='#fff'">수정</button>
+            <button onclick="deleteProject(this)" onmouseover="this.style.backgroundColor='#ccc'"
+              onmouseout="this.style.backgroundColor='#fff'">삭제</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- 수정 팝업창 -->
+<div id="editPopup" class="edit-popup">
+  <!-- 프로젝트 ID를 저장할 hidden input 추가 -->
+  <input type="hidden" id="editProjectId" name="projectId" />
+
+  <input type="text" id="editName" placeholder="프로젝트명" />
+  <pre></pre>
+  <div class="member-input">
+    <input
+      type="text"
+      id="editNewMember"
+      placeholder="팀원을 한 명씩 등록(본인 포함)"
+    />
+    <button onclick="addNewMember('editNewMember', 'editMembersContainer')">
+      등록
+    </button>
+  </div>
+  <div id="editMembersContainer"></div>
+  <pre></pre>
+  <textarea id="editTags" placeholder="태그(작성 예시 : 태그1, 태그2)"></textarea>
+  <pre></pre>
+  <button onclick="saveChanges()">저장</button>
+  <button onclick="closeEditPopup()" class="cancel">취소</button>
+</div>
+
+
+    <!-- 추가 팝업창 -->
+    <div id="addProjectPopup" class="edit-popup">
+      <input type="text" id="newProjectName" placeholder="프로젝트명" />
+      <pre></pre>
+      <div class="member-input">
+        <input
+          type="text"
+          id="newProjectMembers"
+          placeholder="팀원을 한 명씩 등록(본인 포함)"
+        />
+        <button onclick="addMemberToList()">등록</button>
+      </div>
+      <div id="addedMembersContainer"></div>
+      <pre></pre>
+      <textarea id="newProjectTags" placeholder="태그(작성 예시 : 태그1, 태그2)"></textarea>
+      <pre></pre>
+      <button onclick="addProject()">추가</button>
+      <button onclick="closeAddProjectPopup()" class="cancel">취소</button>
+    </div>
+  </body>
+</html>
