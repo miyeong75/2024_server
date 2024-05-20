@@ -11,7 +11,7 @@ db_config = {
     'database': 'serverproject'
 }
 
-@app.route('/')
+@app.route('/minutes')
 def index():
     return render_template('minutesindex.html')
 
