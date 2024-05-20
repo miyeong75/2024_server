@@ -13,9 +13,9 @@ db_config = {
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('minutesindex.html')
 
-@app.route('/page1')
+@app.route('/minutespage1')
 def page1():
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
@@ -40,16 +40,16 @@ def page1():
         else:
             minute['tags'] = []
 
-    return render_template('page1.html', minutes=minutes)
+    return render_template('minutespage1.html', minutes=minutes)
 
 
-@app.route('/page2')
+@app.route('/minutespage2')
 def page2():
-    return render_template('page2.html')
+    return render_template('minutespage2.html')
 
-@app.route('/page3')
+@app.route('/minutespage3')
 def page3_data():
-    return render_template('page3.html')
+    return render_template('minutespage3.html')
 
 @app.route('/api/notes')
 def notes_data():
@@ -66,7 +66,7 @@ def notes_data():
     return jsonify(notes)
 
 
-@app.route('/submit', methods=['POST'])
+@app.route('/minutessubmit', methods=['POST'])
 def submit():
     data = request.json
     title = data['title']
@@ -119,7 +119,7 @@ def submit():
 
 
 
-@app.route('/page4/<int:minutes_id>')
+@app.route('/minutespage4/<int:minutes_id>')
 def show_minutes(minutes_id):
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
@@ -137,7 +137,7 @@ def show_minutes(minutes_id):
     conn.close()
     
     tag_list = [tag['name'] for tag in tags]
-    return render_template('page4.html', minute=minute, tags=tag_list)
+    return render_template('minutespage4.html', minute=minute, tags=tag_list)
 
 
 @app.route('/delete/<int:minutes_id>', methods=['POST'])
@@ -148,7 +148,7 @@ def delete_minutes(minutes_id):
     conn.commit()
     cursor.close()
     conn.close()
-    return redirect(url_for('page1'))  # 삭제 후 리다이렉트할 페이지
+    return redirect(url_for('minutespage1'))  # 삭제 후 리다이렉트할 페이지
 
 @app.route('/minutes/update/<int:minutes_id>', methods=['POST'])
 def update_minute(minutes_id):
@@ -192,7 +192,7 @@ def update_minute(minutes_id):
     cursor.close()
     conn.close()
 
-    return redirect('/page4/' + str(minutes_id))
+    return redirect('/minutespage4/' + str(minutes_id))
 
 
 
@@ -217,11 +217,11 @@ def edit_minutes(minutes_id):
     
     tag_list = [tag['name'] for tag in tags]
     
-    return render_template('page5.html', minute=minute, tags=tag_list)
+    return render_template('minutespage5.html', minute=minute, tags=tag_list)
 
-@app.route('/test')
+@app.route('/minutestest')
 def test222():
-    return render_template('test.html')
+    return render_template('minutestest.html')
 
 
 

@@ -28,7 +28,7 @@
   
       // 페이지 이동 함수
       function goToWritePage() {
-        window.location.href = '/page2'; // 'write.html'을 글쓰기 페이지의 URL로 변경하세요.
+        window.location.href = '/minutespage2'; // 'write.html'을 글쓰기 페이지의 URL로 변경하세요.
       }
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page1.css') }}" />
@@ -46,7 +46,7 @@
   {% for minute in minutes %}
 <div class="s1">
     <p class="s2">{{ minute.MinutesID }}</p>
-    <a href="/page4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
+    <a href="/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
         <p class="s3">{{ minute.Title }}</p>
         <div class="hidden-content">{{ minute.Content }}</div>
     </a>

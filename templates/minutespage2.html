@@ -26,7 +26,7 @@ function register() {
       tags: JSON.stringify(tags)
     };
 
-    fetch('/submit', {
+    fetch('/minutessubmit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ function register() {
     .then(response => response.json())
     .then(data => {
       if(data.success) {
-        window.location.href = '/page3'; // 데이터 전송 후 page3로 리다이렉션
+        window.location.href = '/minutespage3'; // 데이터 전송 후 page3로 리다이렉션
       } else {
         console.error('Error response from server:', data);
     }
@@ -59,7 +59,7 @@ function register() {
             style="width: 94px; height: 40px; position: absolute; left: 696px; top: 66px; border-radius: 8px; background: #c8f2ff; border-width: 1px; border-color: #c8f2ff;"
         ></div>0-->
         <div style = "position: absolute;left: 696px; top: 66px;">
-            <button class="cancel_button" onclick="window.location.href='/page1';">취소</button>
+            <button class="cancel_button" onclick="window.location.href='/minutespage1';">취소</button>
         </div>
         <p
             style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
