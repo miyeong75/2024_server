@@ -207,7 +207,7 @@ function register() {
                 console.log(data);
         
                 // 폼 데이터를 서버에 전송하는 로직을 추가
-                fetch('/submit', {
+                fetch('/minutessubmit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -217,7 +217,7 @@ function register() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/page3'; // 데이터 전송 후 리디렉션할 페이지
+                        window.location.href = '/minutespage3'; // 데이터 전송 후 리디렉션할 페이지
                     } else {
                         console.error('서버에서 오류 응답:', data);
                     }
