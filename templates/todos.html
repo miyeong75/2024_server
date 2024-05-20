@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskApp</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/todos.css') }}">
+</head>
+<body>
+
+<header>
+  프로젝트 이름
+</header>
+
+<div id="container">
+  <div id="sidebar">
+    <a href="/todos" class="nav-item active">할 일 목록</a>
+    <a href="/calendar" class="nav-item">캘린더</a>
+    <div class="nav-item">게시판1</div>
+    <div class="nav-item">게시판2</div>
+  </div>
+  <div id="content">
+    <div class="todo-list" id="todo-list">
+      <!-- 할 일 항목들이 여기에 추가됩니다 -->
+    </div>
+    <img src="{{ url_for('static', filename='images/plus-icon.png') }}" class="add-todo" onclick="addNewTodo()" alt="Add Todo">
+  </div>
+</div>
+
+<!-- 모달 추가 -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h4>일정 추가</h4>
+    <form id="todo-form">
+      <input type="hidden" id="todo-id" name="todo-id">
+      <label for="todo-content">내용:</label>
+      <input type="text" id="todo-content" name="todo-content">
+      
+      <label for="todo-date" class="todo-date-label">날짜:</label>
+      <input type="date" id="todo-date" name="todo-date" class="todo-date-input">
+      
+      <div class="modal-actions">
+        <button type="button" id="modal-save">저장</button>
+        <button type="button" id="modal-cancel">취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/todos.js') }}"></script>
+</body>
+</html>
