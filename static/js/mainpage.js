@@ -1,27 +1,38 @@
 let addedMembers = [];
-      let editedMembers = [];
-      let selectedProject = null; // 선택된 프로젝트를 저장할 변수
+let editedMembers = [];
+let selectedProject = null; // 선택된 프로젝트를 저장할 변수
 
-      const memberList = ["A", "B", "C", "D"];
+let memberList = [];
 
-      function showAddProjectPopup() {
-        document.getElementById("addProjectPopup").style.display = "block";
-      }
+// 페이지 로딩 시 서버에서 사용자 목록을 가져옵니다.
+window.onload = function() {
+    fetch(`/api/users`)
+        .then(response => response.json())
+        .then(data => {
+            memberList = data;
+            console.log('Updated member list:', memberList);
+        })
+        .catch(error => console.error('Error fetching user list:', error));
+};
 
-      function closeAddProjectPopup() {
-        document.getElementById("addProjectPopup").style.display = "none";
-        resetAddProjectForm();
-      }
+function showAddProjectPopup() {
+    document.getElementById("addProjectPopup").style.display = "block";
+}
 
-      function resetAddProjectForm() {
-        document.getElementById("newProjectName").value = "";
-        document.getElementById("newProjectMembers").value = "";
-        document.getElementById("newProjectTags").value = "";
-        addedMembers = [];
-        updateMemberList("addedMembersContainer", addedMembers);
-      }
+function closeAddProjectPopup() {
+    document.getElementById("addProjectPopup").style.display = "none";
+    resetAddProjectForm();
+}
 
-      function addMemberToList() {
+function resetAddProjectForm() {
+    document.getElementById("newProjectName").value = "";
+    document.getElementById("newProjectMembers").value = "";
+    document.getElementById("newProjectTags").value = "";
+    addedMembers = [];
+    updateMemberList("addedMembersContainer", addedMembers);
+}
+
+function addMemberToList() {
     const memberInput = document.getElementById("newProjectMembers");
     const memberName = memberInput.value.trim().toUpperCase();
 
@@ -55,12 +66,12 @@ let addedMembers = [];
         }
       }
 
-      function showEditPopup(button) {
-  const projectElement = button.closest(".project");
-  if (!projectElement) {
-    console.error("프로젝트 요소를 찾을 수 없습니다.");
+function showEditPopup(button) {
+      const projectElement = button.closest(".project");
+      if (!projectElement) {
+        console.error("프로젝트 요소를 찾을 수 없습니다.");
     return;
-  }
+}
 
   // 선택된 프로젝트 저장
   selectedProject = projectElement;
@@ -104,36 +115,36 @@ let addedMembers = [];
 }
 
 
-      function updateMemberList(containerId, members) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = "";
+  function updateMemberList(containerId, members) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = "";
 
-        members.forEach((member) => {
-          const memberHTML = `
-                    <div>
-                        ${member}
-                        <span style="cursor: pointer;" onclick="removeMember('${member}', '${containerId}')"> X </span>
-                    </div>
-                `;
-          container.insertAdjacentHTML("beforeend", memberHTML);
-        });
-      }
+    members.forEach((member) => {
+      const memberHTML = `
+                <div>
+                    ${member}
+                    <span style="cursor: pointer;" onclick="removeMember('${member}', '${containerId}')"> X </span>
+                </div>
+            `;
+      container.insertAdjacentHTML("beforeend", memberHTML);
+    });
+  }
 
-      function removeMember(member, containerId) {
-        const members =
-          containerId === "addedMembersContainer"
-            ? addedMembers
-            : editedMembers;
-        const updatedMembers = members.filter((m) => m !== member);
-        if (containerId === "addedMembersContainer") {
-          addedMembers = updatedMembers;
-        } else {
-          editedMembers = updatedMembers;
-        }
-        updateMemberList(containerId, updatedMembers);
-      }
+  function removeMember(member, containerId) {
+    const members =
+      containerId === "addedMembersContainer"
+        ? addedMembers
+        : editedMembers;
+    const updatedMembers = members.filter((m) => m !== member);
+    if (containerId === "addedMembersContainer") {
+      addedMembers = updatedMembers;
+    } else {
+      editedMembers = updatedMembers;
+    }
+    updateMemberList(containerId, updatedMembers);
+  }
 
-      function addProject() {
+function addProject() {
   const projectName = document.getElementById("newProjectName").value.trim();
   const projectMembers = addedMembers.join(", ");
   const projectTags = document.getElementById("newProjectTags").value.trim();
@@ -344,3 +355,14 @@ function deleteProjectFromServer(projectId) {
         dropdownContent.style.display =
           dropdownContent.style.display === "block" ? "none" : "block";
       }
+
+function goToTodos(element) {
+            // 'data-project-id' 속성 값 가져오기
+            const projectId = element.getAttribute('data-project-id');
+            // 새로운 URL로 이동
+            window.location.href = `/api/todos?project_id=${projectId}`;
+        }
+
+function goToMypage() {
+    window.location.href = `/api/mypage`;
+}
