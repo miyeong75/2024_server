@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskApp</title>
+<title>{{ project_name }}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/todos.css') }}">
 </head>
 <body>
 
 <header>
-  프로젝트 이름
+  <a href="/mainpage" class="home-link">
+    <img src="{{ url_for('static', filename='images/home.png') }}" alt="Home" class="home-icon">
+  </a>
+  <span class="project-title">{{ project_name }}</span>
 </header>
 
 <div id="container">

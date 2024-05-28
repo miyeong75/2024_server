@@ -347,9 +347,6 @@ function deleteProjectFromServer(projectId) {
         });
 }
 
-
-
-
       function showDropdown(button) {
         const dropdownContent = button.nextElementSibling;
         dropdownContent.style.display =
@@ -360,7 +357,7 @@ function goToTodos(element) {
             // 'data-project-id' 속성 값 가져오기
             const projectId = element.getAttribute('data-project-id');
             // 새로운 URL로 이동
-            window.location.href = `/api/todos?project_id=${projectId}`;
+            window.location.href = `/projects/${projectId}/todos`;
         }
 
 function goToMypage() {
