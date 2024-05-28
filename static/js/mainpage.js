@@ -34,7 +34,7 @@ function resetAddProjectForm() {
 
 function addMemberToList() {
     const memberInput = document.getElementById("newProjectMembers");
-    const memberName = memberInput.value.trim().toUpperCase();
+    const memberName = memberInput.value.trim();
 
     // 입력값이 비어 있는지 확인
     if (memberName === "") {
@@ -55,7 +55,7 @@ function addMemberToList() {
 
       function addNewMember(inputId, containerId) {
         const memberInput = document.getElementById(inputId);
-        const memberName = memberInput.value.trim().toUpperCase();
+        const memberName = memberInput.value.trim();
 
         if (memberName !== "" && memberList.includes(memberName)) {
           editedMembers.push(memberName);
@@ -364,5 +364,5 @@ function goToTodos(element) {
         }
 
 function goToMypage() {
-    window.location.href = `/api/mypage`;
+    window.location.href = `/mypage`;
 }
