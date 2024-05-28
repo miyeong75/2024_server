@@ -7,7 +7,7 @@ app = Flask(__name__)
 # 데이터베이스 연결 설정
 db_config = {
     'user': 'root',
-    'password': 'root',
+    'password': '2802',
     'host': 'localhost',
     'database': 'teamteam'
 }
@@ -244,17 +244,21 @@ def update_minute(project_id, minutes_id):
     content = request.form['content']
     tags_str = request.form.get('tags', '')
     
+    # 쉼표로 구분된 태그 문자열을 리스트로 변환
     new_tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
 
-    conn = get_db_connection()
+    # 데이터베이스 연결 및 업데이트
+    conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor()
     cursor.execute("UPDATE Minutes SET Title = %s, Content = %s WHERE MinutesID = %s AND project_id = %s", (title, content, minutes_id, project_id))
 
+    # 기존 태그를 가져오고 그 이름 목록과 ID 매핑 테이블을 만듭니다.
     cursor.execute("SELECT t.id, t.name FROM minutestagslist t JOIN minute_tags mt ON t.id = mt.tag_id WHERE mt.Minutes_id = %s", (minutes_id,))
     existing_tags = cursor.fetchall()
-    existing_tag_names = [tag['name'] for tag in existing_tags]
-    existing_tag_ids = {tag['name']: tag['id'] for tag in existing_tags}
+    existing_tag_names = [tag[1] for tag in existing_tags]
+    existing_tag_ids = {tag[1]: tag[0] for tag in existing_tags}
 
+    # 새 태그 추가 로직
     for tag in new_tags:
         if tag not in existing_tag_names:
             cursor.execute("SELECT id FROM minutestagslist WHERE name = %s", (tag,))
@@ -267,6 +271,7 @@ def update_minute(project_id, minutes_id):
 
             cursor.execute("INSERT INTO minute_tags (Minutes_id, tag_id) VALUES (%s, %s)", (minutes_id, tag_id))
 
+    # 기존 태그 중 새 태그 리스트에 없는 태그를 제거
     for existing_tag_name in existing_tag_names:
         if existing_tag_name not in new_tags:
             cursor.execute("DELETE FROM minute_tags WHERE Minutes_id = %s AND tag_id = %s", (minutes_id, existing_tag_ids[existing_tag_name]))

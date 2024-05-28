@@ -34,118 +34,88 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page1.css') }}" />
   </head>
   <body>
-    <div class="main-container">
-      <div class="content-area">
-  <div class="header-row">
-    <p class = "line-sty" style="width: 50px; text-align: left; color: #828282;">번호</p>
-    <p class = "line-sty" style=" width: 400px;text-align: left; color: #000;">Title</p>
-    <p class = "line-sty" style=" width: 70px;text-align: left; color: #000;">Tag</p>
-    <p class = "line-sty" style="width: 48px;text-align: center; color: #000;">Date</p>
-    <p class = "line-sty" style="width: 84px; text-align: center; color: #000;">Owner</p>
-  </div>
-  {% for minute in minutes %}
-<div class="s1">
-    <p class="s2">{{ minute.MinutesID }}</p>
-    <a href="/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
-        <p class="s3">{{ minute.Title }}</p>
-        <div class="hidden-content">{{ minute.Content }}</div>
-    </a>
-    <div class="s4">
-    <div class="tag-container">
-        {% for tag in minute.tags %}
-        <div class="tag">{{ tag }}</div>
-        {% endfor %}
-    </div>
-  </div>
-    <p class="s7">{{ minute.CreateDate.strftime('%m/%d') }}</p>
-    <p class="s8">{{ minute.Author }}</p>
-</div>
-{% endfor %}
-</div>
-
+    <header>
+      프로젝트 이름
+    </header>
+    <div id="container">
+      <div id="sidebar">
+        <a href="/todos" class="nav-item">할 일 목록</a>
+        <a href="/calendar" class="nav-item">캘린더</a>
+        <a href="/minutespage1" class="nav-item active">회의록</a>
+        <div class="nav-item">게시판2</div>
       </div>
-      <button onclick="location.href='/minutespage2';" class="write-button">글쓰기</button>
-      <div style="width: 1224px; height: 134px; position: absolute; left: 256px; top: 192px;">
-        <button onclick="searchFunction()"class="button">검색</button>
-        <div class = "s9">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative;"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-              stroke="#E0E0E0"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-            <path
-              d="M21 21L16.65 16.65"
-              stroke="#E0E0E0"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></path>
-          </svg>
-          <input type="text" id="searchInput" placeholder="제목/내용을 입력하세요" class="s10" oninput="searchTasks()"/>
+      <div id="content">
+        <div class="main-container">
+          <div class="content-area">
 
-        </div>
-        <p
-          class = "s11"
-        >
-          회의록
-        </p>
-      </div>
-      <div
-        class = "s12"
-      >
-        <div
-          class = "s13"
-        >
-          <div
-            class = "s14"
-          >
-            <p
-              class = "s15"
-            >
-              Team
-            </p>
+          <div class="header-row">
+            <p class = "line-sty" style="width: 50px; text-align: left; color: #828282;">번호</p>
+            <p class = "line-sty" style=" width: 400px;text-align: left; color: #000;">Title</p>
+            <p class = "line-sty" style=" width: 70px;text-align: left; color: #000;">Tag</p>
+            <p class = "line-sty" style="width: 48px;text-align: center; color: #000;">Date</p>
+            <p class = "line-sty" style="width: 84px; text-align: center; color: #000;">Owner</p>
           </div>
-          <div
-            class = "s16"
-          >
-            <div
-              class="s17"
-            ></div>
-            <p
-            class="s18"
-            >
-              Project 1
-            </p>
+          {% for minute in minutes %}
+        <div class="s1">
+            <p class="s2">{{ minute.MinutesID }}</p>
+            <a href="/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
+                <p class="s3">{{ minute.Title }}</p>
+                <div class="hidden-content">{{ minute.Content }}</div>
+            </a>
+            <div class="s4">
+              <div class="tag-container">
+                  {% for tag in minute.tags %}
+                  <div class="tag">{{ tag }}</div>
+                  {% endfor %}
+              </div>
+            </div>
+              <p class="s7">{{ minute.CreateDate.strftime('%m/%d') }}</p>
+              <p class="s8">{{ minute.Author }}</p>
+            </div>
+              {% endfor %}
           </div>
-          <div
-          class="s19"
-          >
-            <div
-            class="s20"
-            ></div>
-            <p
-              class = "s21"
-            >
-              Prohect2
-            </p>
+        
+              </div>
+              <button onclick="location.href='/minutespage2';" class="write-button">글쓰기</button>
+              <div style="width: 1224px; height: 134px; position: absolute; left: 156px; top: 40px;">
+                <button onclick="searchFunction()"class="button">검색</button>
+                <div class = "s9">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative;"
+                    preserveAspectRatio="none"
+                  >
+                    <path
+                      d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+                      stroke="#E0E0E0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                    <path
+                      d="M21 21L16.65 16.65"
+                      stroke="#E0E0E0"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                  <input type="text" id="searchInput" placeholder="제목/내용을 입력하세요" class="s10" oninput="searchTasks()"/>
+        
+                </div>
+                <p
+                  class = "s11"
+                >
+                  회의록
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-        <p
-          class = "s22"
-        >
-          나보영
-        </p>
+
       </div>
     </div>
   </body>

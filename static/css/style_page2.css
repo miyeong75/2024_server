@@ -1,4 +1,73 @@
-
+header {
+    background: #ffffff;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #container {
+    display: flex;
+    flex: 1;
+  }
+  #sidebar {
+    width: 10%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  }
+  .nav-item {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid transparent; 
+    transition: all 0.3s;
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 텍스트 색상을 상속 받음 */
+  }
+  .nav-item:hover, .nav-item.active {
+    color: #4a90e2;
+    border-left: 3px solid #4a90e2;
+    background-color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  #content {
+    width: 90%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Positioning context for the add button */
+  }
+  body, h1, div, ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+  }
+  .nav-item {
+    display: block;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    line-height: 1.6; /* 조정할 수 있습니다 */
+  }
+  .nav-link {
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 텍스트 색상을 상속 받음 */
+    display: block; /* 이 부분이 중요합니다 */
+  }
+  
 .register_button {
     width: 94px;
     position: absolute;

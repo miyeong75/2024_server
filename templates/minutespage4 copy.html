@@ -65,30 +65,42 @@
       </script>
   </head>
 <body>
-    <header>
-        프로젝트 이름
-    </header>
-    <div id="container">
-        <div id="sidebar">
-          <a href="/todos" class="nav-item">할 일 목록</a>
-          <a href="/calendar" class="nav-item">캘린더</a>
-          <a href="/minutespage1" class="nav-item active">회의록</a>
-          <div class="nav-item">게시판2</div>
-        </div>
-        <div id="content">
-            {% include 'minutesmodal.html' %}
-            <div class="container">
-            <div class="sub-container">
-                <p class="heading">
-                    회의록
-                </p>
-                <button class="button red-button" id="deleteButton" data-id="{{ minute.MinutesID }}" onclick="showModal();">삭제</button>
-            <button class="button blue-button" onclick="window.location.href='/minutespage1';">목록</button>
-            <button class="button riwrite-button" onclick="window.location.href='/minutes/edit/{{ minute.MinutesID }}';">수정</button>
-    
-            </div>
+    {% include 'minutesmodal.html' %}
+    <div class="container">
+        <div class="sub-container">
+            <p class="heading">
+                회의록
+            </p>
+            <button class="button red-button" id="deleteButton" data-id="{{ minute.MinutesID }}" onclick="showModal();">삭제</button>
+        <button class="button blue-button" onclick="window.location.href='/minutespage1';">목록</button>
+        <button class="button riwrite-button" onclick="window.location.href='/minutes/edit/{{ minute.MinutesID }}';">수정</button>
 
-            <p class="header-title">제목</p>
+        </div>
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <div class="team-section">
+                    <p class="team-title">
+                        Team
+                    </p>
+            </div>
+            <div class="flex-item flex-item-blue">
+                <div class="icon-container"></div>
+                <p class="project-name">
+                    Project 1
+                </p>
+            </div>
+            <div class="project-container">
+                <div class="project-icon"></div>
+                <p class="project-title">
+                    Prohect2 <!-- 오타가 있습니다. "Project 2"로 수정 가능합니다. -->
+                </p>
+            </div>
+        </div>
+        <p 
+        class="name-title"
+        >나보영</p>
+        </div>
+        <p class="header-title">제목</p>
         <p class="content-title">내용</p>
         <div
         class = "s2"
@@ -98,23 +110,18 @@
         </p>
         </div>
         <div
-        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 706px; position: absolute; left: 200px; top: 120px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
+        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 706px; position: absolute; left: 205px; top: 329px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
         >
         <p id="titleDisplay" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 100%; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
             {{ minute.Title }}
           </p>
         </div>
-        <div style="position: absolute; top: 770px; left: 200px; padding-left: 16px; padding-right: 16px;  border-radius: 5px; border: none; flex-grow: 0; flex-shrink: 0; width: 706px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
+        <div style="position: absolute; top: 970px; left: 205px; padding-left: 16px; padding-right: 16px;  border-radius: 5px; border: none; flex-grow: 0; flex-shrink: 0; width: 706px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
             {% for tag in tags %}
             <span class="tag" style="padding: 4px 8px; margin: 2px; background-color: #e0e0e0; border-radius: 5px;">{{ tag }}</span>
             {% endfor %}
     </div>
-            </div>
-
-        </div>
-  
-  
     </div>
-        
+
 </body>
 </html>
