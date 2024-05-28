@@ -13,7 +13,7 @@
         <span>TeamTeam</span>
       </div>
       <div class="right-buttons">
-        <button>마이페이지</button>
+        <button onclick="goToMypage()">마이페이지</button>
         <button>로그아웃</button>
       </div>
     </header>
@@ -28,7 +28,7 @@
       <!-- 프로젝트 목록 -->
       {% for project in projects %}
       <div class="project" data-project-id="{{ project.project_id }}">
-        <div class="project-info">
+        <div class="project-info" data-project-id="{{ project.project_id }}" onclick="goToTodos(this)">
           <div class="project-name">{{project.project_name}}</div>
           <div class="project-members">팀원: {{ ', '.join(project.members) }}</div>
           <div class="tag-container">

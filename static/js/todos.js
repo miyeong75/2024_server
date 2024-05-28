@@ -31,7 +31,7 @@ window.onload = function() {
 };
 
 function fetchTodos() {
-  fetch('/api/todos')
+  fetch(`/api/projects/${projectId}/todos`)
     .then(response => response.json())
     .then(data => {
       const todoList = document.getElementById('todo-list');
@@ -65,7 +65,7 @@ function fetchTodos() {
 function updateTodoCompleted(element, completed, description, deadline) {
   const todoId = element.dataset.id;  // data-id 속성을 사용하여 ID를 가져옵니다.
   const formattedDeadline = new Date(deadline).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' format
-  fetch(`/api/todos/${todoId}`, {
+  fetch(`/api/projects/${projectId}/todos/${todoId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ function updateTodoCompleted(element, completed, description, deadline) {
 }
 
 function saveTodo(todoText, deadline) {
-  fetch('/api/todos', {
+  fetch(`/api/projects/${projectId}/todos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ function saveTodo(todoText, deadline) {
 
 function updateTodo(todoId, todoText, deadline) {
   const formattedDeadline = new Date(deadline).toISOString().split('T')[0]; // Convert to 'YYYY-MM-DD' format
-  fetch(`/api/todos/${todoId}`, {
+  fetch(`/api/projects/${projectId}/todos/${todoId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ function updateTodo(todoId, todoText, deadline) {
 }
 
 function deleteTodo(todoId) {
-  fetch(`/api/todos/${todoId}`, {
+  fetch(`/api/projects/${projectId}/todos/${todoId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'

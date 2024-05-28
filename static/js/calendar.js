@@ -50,7 +50,7 @@ function createCalendar(year, month) {
 
 // Fetch todos based on year and month
 function fetchTodos(year, month) {
-  fetch(`/api/todos?year=${year}&month=${month + 1}`)
+  fetch(`/api/projects/${projectId}/todos?year=${year}&month=${month + 1}`)
     .then(response => response.json())
     .then(todos => {
       todos.forEach(todo => {
@@ -89,7 +89,7 @@ window.onload = function() {
 
 // 할 일 데이터 불러와 캘린더에 표시
 function fetchTodos() {
-  fetch('/api/todos')
+  fetch(`/api/projects/${projectId}/todos`)
     .then(response => response.json())
     .then(todos => {
       todos.forEach(todo => {
