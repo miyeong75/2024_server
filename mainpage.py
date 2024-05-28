@@ -23,7 +23,8 @@ def get_projects():
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
-        user_name = "A"
+        user_name = "user1"
+        #user_name = request.cookies.get('username')
         select_query = """
         SELECT t.* 
         FROM team t 
@@ -188,6 +189,25 @@ def delete_project(project_id):
         app.logger.error(f'프로젝트 삭제 중 오류 발생: {str(e)}')
         return jsonify(message=f'프로젝트 삭제에 실패했습니다: {str(e)}'), 500
 
+
+@app.route('/api/users', methods=['GET'])
+def get_usernames():
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+
+        select_query = "SELECT username FROM users"
+        cursor.execute(select_query)
+        usernames = [row[0] for row in cursor.fetchall()]
+        print("username : ", usernames)
+
+        cursor.close()
+        conn.close()
+
+        return jsonify(usernames)
+    except Exception as e:
+        app.logger.error(f'사용자 조회 중 오류 발생: {str(e)}')
+        return jsonify(message=f'사용자 조회에 실패했습니다: {str(e)}'), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

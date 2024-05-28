@@ -16,27 +16,27 @@ def get_db_connection():
     return mysql.connector.connect(**db_config)
 
 # 루트 경로 - 할 일 목록 페이지 렌더링
-@app.route('/todos')
-def index_todos():
-    return render_template('todos.html')
+@app.route('/projects/<int:project_id>/todos')
+def index_todos(project_id):
+    return render_template('todos.html', project_id=project_id)
 
 # 캘린더 페이지 라우트 추가
-@app.route('/calendar')  # 캘린더 페이지 경로
-def calendar():
-    return render_template('calendar.html')
+@app.route('/projects/<int:project_id>/calendar')
+def calendar(project_id):
+    return render_template('calendar.html', project_id=project_id)
 
 # mypage 라우트 추가
-@app.route('/mypage')  # mypage 페이지 경로
-def mypage():
-    return render_template('mypage.html')
+@app.route('/projects/<int:project_id>/mypage')
+def mypage(project_id):
+    return render_template('mypage.html', project_id=project_id)
 
 # 할 일 목록 가져오기
-@app.route('/api/todos', methods=['GET'])
-def get_todos():
+@app.route('/api/projects/<int:project_id>/todos', methods=['GET'])
+def get_todos(project_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT id, description, deadline, completed FROM todos")
+        cursor.execute("SELECT id, description, deadline, completed FROM todos WHERE project_id = %s", (project_id,))
         todos = cursor.fetchall()
         return jsonify(todos)
     finally:
@@ -44,14 +44,14 @@ def get_todos():
         connection.close()
 
 # 할 일 추가
-@app.route('/api/todos', methods=['POST'])
-def add_todo():
+@app.route('/api/projects/<int:project_id>/todos', methods=['POST'])
+def add_todo(project_id):
     data = request.json
     connection = get_db_connection()
     cursor = connection.cursor()
     try:
-        sql = "INSERT INTO todos (description, deadline, completed) VALUES (%s, %s, %s)"
-        cursor.execute(sql, (data['description'], data['deadline'], data.get('completed', False)))
+        sql = "INSERT INTO todos (description, deadline, completed, project_id) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql, (data['description'], data['deadline'], data.get('completed', False), project_id))
         connection.commit()
         return jsonify({'id': cursor.lastrowid}), 201
     finally:
@@ -59,21 +59,21 @@ def add_todo():
         connection.close()
 
 # 할 일 수정
-@app.route('/api/todos/<int:todo_id>', methods=['PUT'])
-def update_todo(todo_id):
+@app.route('/api/projects/<int:project_id>/todos/<int:todo_id>', methods=['PUT'])
+def update_todo(project_id, todo_id):
     data = request.json
     description = data.get('description')
     deadline = data.get('deadline')
     completed = data.get('completed', None)
-    
+
     if completed is None:
         return jsonify({'error': 'completed field is required'}), 400
 
     connection = get_db_connection()
     cursor = connection.cursor()
     try:
-        sql = "UPDATE todos SET description=%s, deadline=%s, completed=%s WHERE id=%s"
-        cursor.execute(sql, (description, deadline, completed, todo_id))
+        sql = "UPDATE todos SET description=%s, deadline=%s, completed=%s WHERE id=%s AND project_id=%s"
+        cursor.execute(sql, (description, deadline, completed, todo_id, project_id))
         connection.commit()
         return jsonify({'success': True}), 200
     except Exception as e:
@@ -84,13 +84,13 @@ def update_todo(todo_id):
         connection.close()
 
 # 할 일 삭제
-@app.route('/api/todos/<int:todo_id>', methods=['DELETE'])
-def delete_todo(todo_id):
+@app.route('/api/projects/<int:project_id>/todos/<int:todo_id>', methods=['DELETE'])
+def delete_todo(project_id, todo_id):
     connection = get_db_connection()
     cursor = connection.cursor()
     try:
-        sql = "DELETE FROM todos WHERE id=%s"
-        cursor.execute(sql, (todo_id,))
+        sql = "DELETE FROM todos WHERE id=%s AND project_id=%s"
+        cursor.execute(sql, (todo_id, project_id))
         connection.commit()
         return jsonify({'success': True}), 200
     except Exception as e:
@@ -101,12 +101,12 @@ def delete_todo(todo_id):
         connection.close()
 
 # Minutes 관련 라우트 추가
-@app.route('/minutes')
-def index():
-    return render_template('minutesindex.html')
+@app.route('/projects/<int:project_id>/minutes')
+def index(project_id):
+    return render_template('minutesindex.html', project_id=project_id)
 
-@app.route('/minutespage1')
-def page1():
+@app.route('/projects/<int:project_id>/minutespage1')
+def page1(project_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
@@ -115,8 +115,9 @@ def page1():
         FROM Minutes m
         LEFT JOIN minute_tags mt ON m.MinutesID = mt.Minutes_id
         LEFT JOIN minutestagslist t ON mt.tag_id = t.id
+        WHERE m.project_id = %s
         GROUP BY m.MinutesID, m.Title, m.Content, m.CreateDate, m.Author
-    """)
+    """, (project_id,))
     minutes = cursor.fetchall()
     
     cursor.close()
@@ -128,22 +129,22 @@ def page1():
         else:
             minute['tags'] = []
 
-    return render_template('minutespage1.html', minutes=minutes)
+    return render_template('minutespage1.html', minutes=minutes, project_id=project_id)
 
-@app.route('/minutespage2')
-def page2():
-    return render_template('minutespage2.html')
+@app.route('/projects/<int:project_id>/minutespage2')
+def page2(project_id):
+    return render_template('minutespage2.html', project_id=project_id)
 
-@app.route('/minutespage3')
-def page3_data():
-    return render_template('minutespage3.html')
+@app.route('/projects/<int:project_id>/minutespage3')
+def page3_data(project_id):
+    return render_template('minutespage3.html', project_id=project_id)
 
-@app.route('/api/notes')
-def notes_data():
+@app.route('/api/projects/<int:project_id>/notes')
+def notes_data(project_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT * FROM Minutes")
+    cursor.execute("SELECT * FROM Minutes WHERE project_id = %s", (project_id,))
     notes = cursor.fetchall()
     
     cursor.close()
@@ -151,8 +152,8 @@ def notes_data():
     
     return jsonify(notes)
 
-@app.route('/minutessubmit', methods=['POST'])
-def submit():
+@app.route('/projects/<int:project_id>/minutessubmit', methods=['POST'])
+def submit(project_id):
     data = request.json
     title = data['title']
     content = data['content']
@@ -166,8 +167,8 @@ def submit():
     
     try:
         cursor.execute(
-            "INSERT INTO Minutes (Title, Content, Author, CreateDate) VALUES (%s, %s, %s, %s)",
-            (title, content, author, create_date)
+            "INSERT INTO Minutes (Title, Content, Author, CreateDate, project_id) VALUES (%s, %s, %s, %s, %s)",
+            (title, content, author, create_date, project_id)
         )
         post_id = cursor.lastrowid
 
@@ -194,11 +195,11 @@ def submit():
 
     return jsonify({"success": True, "message": "Note saved."})
 
-@app.route('/minutespage4/<int:minutes_id>')
-def show_minutes(minutes_id):
+@app.route('/projects/<int:project_id>/minutespage4/<int:minutes_id>')
+def show_minutes(project_id, minutes_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Minutes WHERE MinutesID = %s", (minutes_id,))
+    cursor.execute("SELECT * FROM Minutes WHERE MinutesID = %s AND project_id = %s", (minutes_id, project_id))
     minute = cursor.fetchone()
     
     cursor.execute("""
@@ -212,20 +213,20 @@ def show_minutes(minutes_id):
     conn.close()
     
     tag_list = [tag['name'] for tag in tags]
-    return render_template('minutespage4.html', minute=minute, tags=tag_list)
+    return render_template('minutespage4.html', minute=minute, tags=tag_list, project_id=project_id)
 
-@app.route('/delete/<int:minutes_id>', methods=['POST'])
-def delete_minutes(minutes_id):
+@app.route('/projects/<int:project_id>/delete/<int:minutes_id>', methods=['POST'])
+def delete_minutes(project_id, minutes_id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM Minutes WHERE MinutesID = %s", (minutes_id,))
+    cursor.execute("DELETE FROM Minutes WHERE MinutesID = %s AND project_id = %s", (minutes_id, project_id))
     conn.commit()
     cursor.close()
     conn.close()
-    return redirect(url_for('page1'))
+    return redirect(url_for('page1', project_id=project_id))
 
-@app.route('/minutes/update/<int:minutes_id>', methods=['POST'])
-def update_minute(minutes_id):
+@app.route('/projects/<int:project_id>/minutes/update/<int:minutes_id>', methods=['POST'])
+def update_minute(project_id, minutes_id):
     title = request.form['title']
     content = request.form['content']
     tags_str = request.form.get('tags', '')
@@ -234,7 +235,7 @@ def update_minute(minutes_id):
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE Minutes SET Title = %s, Content = %s WHERE MinutesID = %s", (title, content, minutes_id))
+    cursor.execute("UPDATE Minutes SET Title = %s, Content = %s WHERE MinutesID = %s AND project_id = %s", (title, content, minutes_id, project_id))
 
     cursor.execute("SELECT t.id, t.name FROM minutestagslist t JOIN minute_tags mt ON t.id = mt.tag_id WHERE mt.Minutes_id = %s", (minutes_id,))
     existing_tags = cursor.fetchall()
@@ -261,13 +262,13 @@ def update_minute(minutes_id):
     cursor.close()
     conn.close()
 
-    return redirect('/minutespage4/' + str(minutes_id))
+    return redirect(f'/projects/{project_id}/minutespage4/' + str(minutes_id))
 
-@app.route('/minutes/edit/<int:minutes_id>')
-def edit_minutes(minutes_id):
+@app.route('/projects/<int:project_id>/minutes/edit/<int:minutes_id>')
+def edit_minutes(project_id, minutes_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Minutes WHERE MinutesID = %s", (minutes_id,))
+    cursor.execute("SELECT * FROM Minutes WHERE MinutesID = %s AND project_id = %s", (minutes_id, project_id))
     minute = cursor.fetchone()
     
     cursor.execute("""
@@ -282,11 +283,11 @@ def edit_minutes(minutes_id):
     
     tag_list = [tag['name'] for tag in tags]
     
-    return render_template('minutespage5.html', minute=minute, tags=tag_list)
+    return render_template('minutespage5.html', minute=minute, tags=tag_list, project_id=project_id)
 
-@app.route('/minutestest')
-def test222():
-    return render_template('minutestest.html')
+@app.route('/projects/<int:project_id>/minutestest')
+def test222(project_id):
+    return render_template('minutestest.html', project_id=project_id)
 
 if __name__ == '__main__':
     app.run(debug=True)

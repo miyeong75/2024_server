@@ -14,9 +14,9 @@
 
 <div id="container">
   <div id="sidebar">
-    <a href="/todos" class="nav-item active">할 일 목록</a>
-    <a href="/calendar" class="nav-item">캘린더</a>
-    <a href="/minutespage1" class="nav-item">회의록</a>
+    <a href="/projects/{{ project_id }}/todos" class="nav-item active">할 일 목록</a>
+    <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
+    <a href="/projects/{{ project_id }}/minutespage1" class="nav-item">회의록</a>
     <div class="nav-item">게시판2</div>
   </div>
   <div id="content">
@@ -48,6 +48,9 @@
   </div>
 </div>
 
+<script>
+  const projectId = {{ project_id }};
+</script>
 <script src="{{ url_for('static', filename='js/todos.js') }}"></script>
 </body>
 </html>
