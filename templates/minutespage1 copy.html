@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의록 게시판</title>
+    <script>
+      // 여기에 자바스크립트 함수를 추가
+      function searchTasks() {
+        // 검색 로직을 구현
+        alert('검색 기능을 아직 구현하지 않았습니다!');
+      }
+
+      function searchTasks() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const records = document.querySelectorAll('.content-area .s1');
+      
+        records.forEach(record => {
+          const title = record.querySelector('.s3').textContent.toLowerCase();
+          const content = record.querySelector('.hidden-content').textContent.toLowerCase(); // 숨겨진 내용 접근
+          if (title.includes(searchText) || content.includes(searchText)) {
+            record.style.display = ''; // 검색어가 포함된 게시글만 표시
+          } else {
+            record.style.display = 'none'; // 검색어가 포함되지 않은 게시글은 숨김
+          }
+        });
+      }
+  
+      // 페이지 이동 함수
+      function goToWritePage() {
+        window.location.href = '/minutespage2'; // 'write.html'을 글쓰기 페이지의 URL로 변경하세요.
+      }
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page1.css') }}" />
+  </head>
+  <body>
+    <header>
+      프로젝트 이름
+    </header>
+        <div class="main-container">
+      <div class="content-area">
+  <div class="header-row">
+    <p class = "line-sty" style="width: 50px; text-align: left; color: #828282;">번호</p>
+    <p class = "line-sty" style=" width: 400px;text-align: left; color: #000;">Title</p>
+    <p class = "line-sty" style=" width: 70px;text-align: left; color: #000;">Tag</p>
+    <p class = "line-sty" style="width: 48px;text-align: center; color: #000;">Date</p>
+    <p class = "line-sty" style="width: 84px; text-align: center; color: #000;">Owner</p>
+  </div>
+  {% for minute in minutes %}
+<div class="s1">
+    <p class="s2">{{ minute.MinutesID }}</p>
+    <a href="/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
+        <p class="s3">{{ minute.Title }}</p>
+        <div class="hidden-content">{{ minute.Content }}</div>
+    </a>
+    <div class="s4">
+    <div class="tag-container">
+        {% for tag in minute.tags %}
+        <div class="tag">{{ tag }}</div>
+        {% endfor %}
+    </div>
+  </div>
+    <p class="s7">{{ minute.CreateDate.strftime('%m/%d') }}</p>
+    <p class="s8">{{ minute.Author }}</p>
+</div>
+{% endfor %}
+</div>
+
+      </div>
+      <button onclick="location.href='/minutespage2';" class="write-button">글쓰기</button>
+      <div style="width: 1224px; height: 134px; position: absolute; left: 256px; top: 192px;">
+        <button onclick="searchFunction()"class="button">검색</button>
+        <div class = "s9">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative;"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+              stroke="#E0E0E0"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M21 21L16.65 16.65"
+              stroke="#E0E0E0"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          <input type="text" id="searchInput" placeholder="제목/내용을 입력하세요" class="s10" oninput="searchTasks()"/>
+
+        </div>
+        <p
+          class = "s11"
+        >
+          회의록
+        </p>
+      </div>
+      <div
+        class = "s12"
+      >
+        <div
+          class = "s13"
+        >
+          <div
+            class = "s14"
+          >
+            <p
+              class = "s15"
+            >
+              Team
+            </p>
+          </div>
+          <div
+            class = "s16"
+          >
+            <div
+              class="s17"
+            ></div>
+            <p
+            class="s18"
+            >
+              Project 1
+            </p>
+          </div>
+          <div
+          class="s19"
+          >
+            <div
+            class="s20"
+            ></div>
+            <p
+              class = "s21"
+            >
+              Prohect2
+            </p>
+          </div>
+        </div>
+        <p
+          class = "s22"
+        >
+          나보영
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

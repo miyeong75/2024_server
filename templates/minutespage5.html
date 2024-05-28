@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
+    <head>
+        <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회의록 작성</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page2.css') }}" />
@@ -56,83 +56,52 @@
             element.parentNode.remove(); // 부모 div를 삭제하여 태그 삭제
         }
         </script>
-  </head>
-<body>
-    <div style="width: 1480px; height: 1121px; position: relative; background: #fff;">
-        <div style="width: 1224px; height: 134px; position: absolute; left: 256px; top: 192px;">
-        <div style = "position: absolute;left: 696px; top: 66px;">
-            <button class="cancel_button" onclick="window.location.href='/minutespage4/{{ minute.MinutesID }}';">취소</button>
-        </div>
-        <p
-            style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
-        >
-            회의록 수정
-        </p>
-        <div
-            style="width: 94px; height: 40px; position: absolute; left: 814px; top: 66px; "
-        >
-            <button onclick="collectTagsAndSubmit()"
-            class="register_button">수정</button>
-        </div>
-        </div>
-        <div
-        style="width: 256px; height: 1121px; position: absolute; left: 0px; top: 0px; overflow: hidden; background: #fff; border-top-width: 0px; border-right-width: 1px; border-bottom-width: 0px; border-left-width: 0px; border-color: #e0e0e0;"
-        >
-        <div
-            style="display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; width: 240px; position: absolute; left: 8px; top: 78px; gap: 4px;"
-        >
-            <div
-            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px;"
-            >
-            <p
-                style="flex-grow: 0; flex-shrink: 0; width: 208px; height: 24px; font-size: 16px; font-weight: 600; text-align: left; color: #000;"
-            >
-                Team
-            </p>
+      </head>
+  <body>
+    <header>
+      프로젝트 이름
+    </header>
+    <div id="container">
+      <div id="sidebar">
+        <a href="/todos" class="nav-item">할 일 목록</a>
+        <a href="/calendar" class="nav-item">캘린더</a>
+        <a href="/minutespage1" class="nav-item active">회의록</a>
+        <div class="nav-item">게시판2</div>
+      </div>
+      <div id="content">
+        <div style="width: 1350px; height: 1121px; position: relative; background: #fff;">
+            <div style="width: 1224px; height: 134px; position: absolute; left: 0px; top: 10px;">
+                <div style = "position: absolute;left: 696px; top: 66px;">
+                    <button class="cancel_button" onclick="window.location.href='/minutespage4/{{ minute.MinutesID }}';">취소</button>
+                </div>
+                <p
+                    style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
+                >
+                    회의록 수정
+                </p>
+                <div
+                    style="width: 94px; height: 40px; position: absolute; left: 814px; top: 66px; "
+                >
+                    <button onclick="collectTagsAndSubmit()"
+                    class="register_button">수정</button>
+                </div>
+                </div>
+                
+
             </div>
-            <div
-            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px; background: #eefeff;"
-            >
-            <div
-                style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative; overflow: hidden;"
-            ></div>
+            
             <p
-                style="flex-grow: 1; width: 168px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
-            >
-                Project 1
-            </p>
-            </div>
-            <div
-            style="display: flex; justify-content: flex-start; align-items: center; align-self: stretch; flex-grow: 0; flex-shrink: 0; height: 40px; position: relative; gap: 16px; padding-left: 16px; padding-right: 16px; border-radius: 8px; background: #fff;"
-            >
-            <div
-                style="flex-grow: 0; flex-shrink: 0; width: 24px; height: 24px; position: relative; overflow: hidden;"
-            ></div>
-            <p
-                style="flex-grow: 1; width: 168px; font-size: 16px; font-weight: 500; text-align: left; color: #000;"
-            >
-                Prohect2
-            </p>
-            </div>
-        </div>
-        <p
-            style="position: absolute; left: 24px; top: 24px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
-        >
-            나보영
-        </p>
-        </div>
-        <p
-        style="position: absolute; left: 350px; top: 340px; " calss = "pontmake"
+        style="position: absolute; left: 150px; top: 140px; " calss = "pontmake"
         >
         제목
         </p>
         <p
-        style="position: absolute; left: 350px; top: 627px; " calss = "pontmake"
+        style="position: absolute; left: 150px; top: 227px; " calss = "pontmake"
         >
         내용
         </p>
         <div
-        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 705px; height: 462px; position: absolute; left: 404px; top: 408px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
+        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 705px; height: 462px; position: absolute; left: 200px; top: 208px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
         >
         <form id="myForm" action="{{ url_for('update_minute', minutes_id=minute.MinutesID) }}" method="POST">
         <textarea id="content" name="content"
@@ -141,22 +110,22 @@
         </textarea>
         </div>
         <div
-        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 706px; position: absolute; left: 405px; top: 329px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
+        style="display: flex; justify-content: flex-start; align-items: flex-start; width: 706px; position: absolute; left: 200px; top: 140px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
         >
         <input 
             style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 100%; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
             type="text" id="title" name="title" value="{{ minute.Title }}">
         </div>
-        <div id="tags" style = "position: absolute; top: 1000px; left: 405px; padding-left: 16px; padding-right: 16px;  border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 706px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
+        <div id="tags" style = "position: absolute; top: 750px; left: 210px; padding-left: 16px; padding-right: 16px;  border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 706px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
             <!-- 기존 태그들이 여기에 미리 채워집니다 -->
         </div>
         <input type="hidden" id="hiddenTags" name="tags">
-        <input type="text" id="tagInput" placeholder="Add a new tag" style="position: absolute; top: 1100px; left: 405px; margin-top: 10px; width: 706px; padding: 8px; font-size: 16px; color: #828282; border-radius: 5px; border: 1px solid #ccc;">
+        <input type="text" id="tagInput" placeholder="Add a new tag" style="position: absolute; top: 800px; left: 210px; margin-top: 10px; width: 706px; padding: 8px; font-size: 16px; color: #828282; border-radius: 5px; border: 1px solid #ccc;">
 
         
         </form>
-        
-    </div>
+        </div>
+    
+  </body>
 
-</body>
 </html>
