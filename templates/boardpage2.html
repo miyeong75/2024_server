@@ -26,7 +26,7 @@
           tags: JSON.stringify(tags)
         };
     
-        fetch('/minutessubmit', {
+        fetch('/boardsubmit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -36,7 +36,7 @@
         .then(response => response.json())
         .then(data => {
           if(data.success) {
-            window.location.href = '/projects/{{ project_id }}/minutespage3'; // 데이터 전송 후 page3로 리다이렉션
+            window.location.href = '/projects/{{ project_id }}/boardpage3'; // 데이터 전송 후 page3로 리다이렉션
           } else {
             console.error('Error response from server:', data);
         }
@@ -63,20 +63,20 @@
       <div id="sidebar">
         <a href="/projects/{{ project_id }}/todos" class="nav-item">할 일 목록</a>
         <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
-        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item active">회의록</a>
-        <a href="/projects/{{ project_id }}/boardpage1" class="nav-item">게시판</a>
+        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item">회의록</a>
+        <a href="/projects/{{ project_id }}/boardpage1" class="nav-item active">게시판</a>
       </div>
       <div id="content">
         <div style="width: 1350px; height: 1121px; position: relative; background: #fff;">
             <div style="width: 1224px; height: 134px; position: absolute; left: 0px; top: 10px;">
 
                 <div style = "position: absolute;left: 696px; top: 66px;">
-                    <button class="cancel_button" onclick="window.location.href='/projects/{{ project_id }}/minutespage1';">취소</button>
+                    <button class="cancel_button" onclick="window.location.href='/projects/{{ project_id }}/boardpage1';">취소</button>
                 </div>
                 <p
                     style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
                 >
-                    회의록 작성
+                    게시글 작성
                 </p>
                     <div
                         style="width: 94px; height: 40px; position: absolute; left: 814px; top: 66px; "
@@ -175,7 +175,7 @@
                 console.log(data);
         
                 // 폼 데이터를 서버에 전송하는 로직을 추가
-                fetch('/projects/{{ project_id }}/minutessubmit', {
+                fetch('/projects/{{ project_id }}/boardsubmit', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -185,7 +185,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = `/projects/{{ project_id }}/minutespage4/${data.minutes_id}`; // 데이터 전송 후 리디렉션할 페이지
+                        window.location.href = `/projects/{{ project_id }}/boardpage4/${data.boards_id}`; // 데이터 전송 후 리디렉션할 페이지
                     } else {
                         console.error('서버에서 오류 응답:', data);
                     }

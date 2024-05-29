@@ -1,0 +1,24 @@
+<div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <p>이 문서를 삭제하시겠습니까?</p>
+      <button onclick="confirmDelete()" class="modal-button confirm">확인</button>
+      <button onclick="closeModal()" class="modal-button cancel">취소</button>
+    </div>
+  </div>
+  
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <form id="editForm">
+            <label for="editTitle">제목:</label>
+            <input type="text" id="editTitle" name="title" value="{{ board.Title }}">
+            <label for="editContent">내용:</label>
+            <textarea id="editContent" name="content">{{ board.Content }}</textarea>
+            <button type="button" onclick="submitEdit({{ board.boardsID }})">저장</button>
+        </form>
+    </div>
+</div>
+
+  

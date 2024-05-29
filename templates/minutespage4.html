@@ -17,11 +17,11 @@
           
           function confirmDelete() {
             const minutesId = document.getElementById('deleteButton').getAttribute('data-id');
-            fetch('/delete/' + minutesId, { method: 'POST' })
+            fetch('/projects/{{ project_id }}/delete/' + minutesId, { method: 'POST' })
               .then(response => {
                 if (response.ok) {
                   alert('문서가 삭제되었습니다.');
-                  window.location.href = '/minutespage1';  // 삭제 후 이동할 페이지
+                  window.location.href = '/projects/{{ project_id }}/minutespage1';  // 삭제 후 이동할 페이지
                 } else {
                   alert('문서 삭제에 실패했습니다.');
                 }
@@ -43,7 +43,7 @@
         function submitEdit(minutesId) {
             const title = document.getElementById('editTitle').value;
             const content = document.getElementById('editContent').value;
-            fetch('/update/' + minutesId, {
+            fetch('/projects/{{ project_id }}/minutes/update/' + minutesId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,14 +66,17 @@
   </head>
 <body>
     <header>
-        프로젝트 이름
+      <a href="/mainpage" class="home-link">
+        <img src="{{ url_for('static', filename='images/home.png') }}" alt="Home" class="home-icon">
+      </a>
+      <span class="project-title">{{ project_name }}</span>
     </header>
     <div id="container">
         <div id="sidebar">
-          <a href="/todos" class="nav-item">할 일 목록</a>
-          <a href="/calendar" class="nav-item">캘린더</a>
-          <a href="/minutespage1" class="nav-item active">회의록</a>
-          <div class="nav-item">게시판2</div>
+          <a href="/projects/{{ project_id }}/todos" class="nav-item">할 일 목록</a>
+          <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
+          <a href="/projects/{{ project_id }}/minutespage1" class="nav-item active">회의록</a>
+          <a href="/projects/{{ project_id }}/boardpage1" class="nav-item">게시판</a>
         </div>
         <div id="content">
             {% include 'minutesmodal.html' %}
@@ -83,8 +86,8 @@
                     회의록
                 </p>
                 <button class="button red-button" id="deleteButton" data-id="{{ minute.MinutesID }}" onclick="showModal();">삭제</button>
-            <button class="button blue-button" onclick="window.location.href='/minutespage1';">목록</button>
-            <button class="button riwrite-button" onclick="window.location.href='/minutes/edit/{{ minute.MinutesID }}';">수정</button>
+            <button class="button blue-button" onclick="window.location.href='/projects/{{ project_id }}/minutespage1';">목록</button>
+            <button class="button riwrite-button" onclick="window.location.href='/projects/{{ project_id }}/minutes/edit/{{ minute.MinutesID }}';">수정</button>
     
             </div>
 
