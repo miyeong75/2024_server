@@ -152,23 +152,7 @@ def page2(project_id):
     project_name = get_project_name(project_id)
     return render_template('minutespage2.html', project_id=project_id, project_name=project_name)
 
-@app.route('/projects/<int:project_id>/minutespage3')
-def page3_data(project_id):
-    project_name = get_project_name(project_id)
-    return render_template('minutespage3.html', project_id=project_id, project_name=project_name)
 
-@app.route('/api/projects/<int:project_id>/notes')
-def notes_data(project_id):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
-    cursor.execute("SELECT * FROM Minutes WHERE project_id = %s", (project_id,))
-    notes = cursor.fetchall()
-    
-    cursor.close()
-    conn.close()
-    
-    return jsonify(notes)
 
 @app.route('/projects/<int:project_id>/minutessubmit', methods=['POST'])
 def submit(project_id):
@@ -310,10 +294,7 @@ def edit_minutes(project_id, minutes_id):
     
     return render_template('minutespage5.html', minute=minute, tags=tag_list, project_id=project_id)
 
-@app.route('/projects/<int:project_id>/minutestest')
-def test222(project_id):
-    project_name = get_project_name(project_id)
-    return render_template('minutestest.html', project_id=project_id, project_name=project_name)
+
 
 # mainpage 라우트 추가
 @app.route('/mainpage')
@@ -537,18 +518,7 @@ def boardpage2(project_id):
     return render_template('boardpage2.html', project_id=project_id, project_name=project_name)
 
 
-@app.route('/api/projects/<int:project_id>/boardnotes')
-def boardnotes_data(project_id):
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-    
-    cursor.execute("SELECT * FROM boards WHERE project_id = %s", (project_id,))
-    notes = cursor.fetchall()
-    
-    cursor.close()
-    conn.close()
-    
-    return jsonify(notes)
+
 
 @app.route('/projects/<int:project_id>/boardsubmit', methods=['POST'])
 def boardsubmit(project_id):
