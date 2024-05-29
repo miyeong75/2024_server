@@ -1,76 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Signup</title>
   <!-- CSS 스타일시트 연결: 외부 CSS 파일인 'style.css'를 현재 HTML 문서에 적용하기 위한 링크 -->
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="stylelogin.css">
   <!-- JavaScript 파일 연결 -->
-  <script src="forgot_password.js" defer></script>
   <script src="signup.js" defer></script>
   <script src="login.js" defer></script>
+  <!--<script src="forgot_password.js" defer></script>-->
 </head>
-<div class="login-wrap">
-  <!-- 로그인 및 회원가입 폼을 포함하는 전체 컨테이너 -->
-  <div class="login-html">
-    <!-- 'Sign In' 탭 선택을 위한 라디오 버튼. 기본적으로 선택됨 -->
-    <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
-    <!-- 'Sign In' 탭에 대한 라벨 -->
-    <label for="tab-1" class="tab">Sign In</label>
-    <!-- 'Sign Up' 탭 선택을 위한 라디오 버튼 -->
-    <input id="tab-2" type="radio" name="tab" class="sign-up">
-    <!-- 'Sign Up' 탭에 대한 라벨 -->
-    <label for="tab-2" class="tab">Sign Up</label>
-    <!-- 로그인 및 회원가입 양식을 포함하는 폼 컨테이너 -->
-    <div class="login-form">
-      <!-- 로그인 양식 -->
-      <div class="sign-in-htm">
-        <!-- 로고 이미지 추가 -->
-        <div class="logo-container">
-          <img src="logo.png" alt="Logo" class="login-logo">
+<body>
+  <div class="login-wrap">
+    <div class="login-html">
+      <input id="tab-1" type="radio" name="tab" class="sign-in" checked>
+      <label for="tab-1" class="tab">Sign In</label>
+      <input id="tab-2" type="radio" name="tab" class="sign-up">
+      <label for="tab-2" class="tab">Sign Up</label>
+      <div class="login-form">
+        <div class="sign-in-htm">
+          <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="login-logo">
+          </div>
+          <form id="loginForm">
+            <div class="group">
+              <label for="login-username" class="label">Username</label>
+              <input id="login-username" type="text" class="input" name="username">
+            </div>
+            <div class="group">
+              <label for="login-password" class="label">Password</label>
+              <input id="login-password" type="password" class="input" data-type="password" name="password">
+            </div>
+            <div class="group">
+              <input type="submit" class="button" value="Sign In">
+            </div>
+            <div class="hr"></div>
+            <!--<div class="foot-lnk">
+              <a id="forgot-password-link" href="#">Forgot Password?</a>
+            </div>-->
+          </form>
         </div>
-        <form id="loginForm">
-          <div class="group">
-            <label for="login-username" class="label">Username</label>
-            <input id="login-username" type="text" class="input" name="username">
-          </div>
-          <div class="group">
-            <label for="login-password" class="label">Password</label>
-            <input id="login-password" type="password" class="input" data-type="password" name="password">
-          </div>
-          <div class="group">
-            <input type="submit" class="button" value="Sign In">
-          </div>
-          <!-- 수평선(구분선) -->
-          <div class="hr"></div>
-          <!-- Forgot Password 링크 -->
-          <div class="foot-lnk">
-            <a href="#forgot">Forgot Password?</a>
-          </div>
-        </form>
-      </div>
-      <!-- 회원가입 양식 -->
-      <div class="sign-up-htm">
-        <form id="signupForm">
-          <div class="group">
-            <label for="signup-user" class="label">Username</label>
-            <input id="signup-user" type="text" class="input" name="username">
-          </div>
-          <div class="group">
-            <label for="signup-pass" class="label">Password</label>
-            <input id="signup-pass" type="password" class="input" data-type="password" name="password">
-          </div>
-          <div class="group">
-            <label for="signup-repeat-pass" class="label">Repeat Password</label>
-            <input id="signup-repeat-pass" type="password" class="input" data-type="password" name="repeat_password">
-          </div>
-          <div class="group">
-            <label for="signup-email" class="label">Email Address</label>
-            <input id="signup-email" type="text" class="input" name="email">
-          </div>
-          <div class="group">
-            <input type="submit" class="button" value="Sign Up">
-          </div>
-          <!-- 수평선(구분선) -->
-          <div class="hr"></div>
-        </form>
+        <div class="sign-up-htm">
+          <form id="signupForm">
+            <div class="group">
+              <label for="signup-user" class="label">Username</label>
+              <input id="signup-user" type="text" class="input" name="username">
+            </div>
+            <div class="group">
+              <label for="signup-pass" class="label">Password</label>
+              <input id="signup-pass" type="password" class="input" data-type="password" name="password">
+            </div>
+            <div class="group">
+              <label for="signup-repeat-pass" class="label">Repeat Password</label>
+              <input id="signup-repeat-pass" type="password" class="input" data-type="password" name="repeat_password">
+            </div>
+            <div class="group">
+              <label for="signup-email" class="label">Email Address</label>
+              <input id="signup-email" type="text" class="input" name="email">
+            </div>
+            <div class="group">
+              <input type="submit" class="button" value="Sign Up">
+            </div>
+            <div class="hr"></div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
+<!-- 
+  <div id="forgot-password-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <form id="forgot-password-form">
+        <div class="group">
+          <label for="forgot-username" class="label">Username</label>
+          <input id="forgot-username" type="text" class="input" name="username">
+        </div>
+        <div class="group">
+          <label for="forgot-email" class="label">Email</label>
+          <input id="forgot-email" type="email" class="input" name="email">
+        </div>
+        <div class="group">
+          <input type="submit" class="button" value="Send Verification Code">
+        </div>
+      </form>
+      <form id="verify-code-form" style="display:none;">
+        <div class="group">
+          <label for="verification-code" class="label">Verification Code</label>
+          <input id="verification-code" type="text" class="input" name="verification_code">
+        </div>
+        <div class="group">
+          <input type="submit" class="button" value="Verify and Show Password">
+        </div>
+      </form>
+    </div>
+  </div>
+ -->
+</body>
+</html>
