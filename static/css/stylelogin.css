@@ -1,167 +1,224 @@
 /* 기본 스타일 설정 */
-body{
-  margin:0; /* 바디의 마진을 0으로 설정 */
-  color:#6a6f8c; /* 텍스트 색상 설정 */
-  background:#c8c8c8; /* 배경색 설정 */
-  font:600 16px/18px 'Open Sans',sans-serif; /* 폰트 스타일 설정 */
+body {
+  margin: 0; /* 바디의 마진을 0으로 설정 */
+  color: #6a6f8c; /* 텍스트 색상 설정 */
+  background: #c8c8c8; /* 배경색 설정 */
+  font: 600 16px/18px 'Open Sans', sans-serif; /* 폰트 스타일 설정 */
 }
 /* 모든 요소, 가상요소의 박스 크기 설정 방식을 border-box로 설정 */
-*,:after,:before{box-sizing:border-box}
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
 /* clearfix 기법 적용을 위한 설정 */
-.clearfix:after,.clearfix:before{content:'';display:table}
-.clearfix:after{clear:both;display:block}
+.clearfix:after,
+.clearfix:before {
+  content: '';
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+  display: block;
+}
 /* 모든 링크는 상속 색상을 사용하고, 밑줄 없앰 */
-a{color:inherit;text-decoration:none}
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
 /* 로그인 래퍼 설정 */
-.login-wrap{
-  width:100%;
-  margin:auto;
-  max-width:525px; /* 최대 너비 설정 */
-  min-height:670px; /* 최소 높이 설정 */
-  position:relative;
-  background:#c8c8c8; /* 배경 이미지 대신 단색 배경으로 변경 */
-  box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19); /* 그림자 효과 추가 */
+.login-wrap {
+  width: 100%;
+  margin: auto;
+  max-width: 525px; /* 최대 너비 설정 */
+  min-height: 670px; /* 최소 높이 설정 */
+  position: relative;
+  background: #c8c8c8; /* 배경 이미지 대신 단색 배경으로 변경 */
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19); /* 그림자 효과 추가 */
 }
-.login-html{
-  width:100%;
-  height:100%;
-  position:absolute;
-  padding:90px 70px 50px 70px; /* 패딩 설정 */
-  background:rgba(40,57,101,.9); /* 배경색 설정, 투명도 적용 */
+.login-html {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding: 90px 70px 50px 70px; /* 패딩 설정 */
+  background: rgba(40, 57, 101, 0.9); /* 배경색 설정, 투명도 적용 */
 }
 /* 로그인과 회원가입 폼 기본 스타일 설정 */
 .login-html .sign-in-htm,
-.login-html .sign-up-htm{
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  position:absolute;
-  transform:rotateY(180deg); /* 회전 효과 */
-  backface-visibility:hidden; /* 뒷면 숨김 처리 */
-  transition:all .4s linear; /* 전환 효과 설정 */
+.login-html .sign-up-htm {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  transform: rotateY(180deg); /* 회전 효과 */
+  backface-visibility: hidden; /* 뒷면 숨김 처리 */
+  transition: all 0.4s linear; /* 전환 효과 설정 */
 }
 /* 기본적으로 표시되지 않는 요소들 설정 */
 .login-html .sign-in,
 .login-html .sign-up,
-.login-form .group .check{
-  display:none;
+.login-form .group .check {
+  display: none;
 }
 /* 텍스트 대문자 변환 */
 .login-html .tab,
 .login-form .group .label,
-.login-form .group .button{
-  text-transform:uppercase;
+.login-form .group .button {
+  text-transform: uppercase;
 }
 /* 탭 설정 */
-.login-html .tab{
-  font-size:22px;
-  margin-right:15px;
-  padding-bottom:5px;
-  margin:0 15px 10px 0;
-  display:inline-block;
-  border-bottom:2px solid transparent; /* 투명한 밑줄 */
+.login-html .tab {
+  font-size: 22px;
+  margin-right: 15px;
+  padding-bottom: 5px;
+  margin: 0 15px 10px 0;
+  display: inline-block;
+  border-bottom: 2px solid transparent; /* 투명한 밑줄 */
 }
 /* 활성화된 탭 스타일 */
 .login-html .sign-in:checked + .tab,
-.login-html .sign-up:checked + .tab{
-  color:#fff; /* 텍스트 색상 */
-  border-color:#1161ee; /* 밑줄 색상 */
+.login-html .sign-up:checked + .tab {
+  color: #fff; /* 텍스트 색상 */
+  border-color: #1161ee; /* 밑줄 색상 */
 }
 /* 로그인 폼 스타일 */
-.login-form{
-  min-height:345px;
-  position:relative;
-  perspective:1000px; /* 3D 효과 */
-  transform-style:preserve-3d;
+.login-form {
+  min-height: 345px;
+  position: relative;
+  perspective: 1000px; /* 3D 효과 */
+  transform-style: preserve-3d;
 }
-.login-form .group{
-  margin-bottom:15px;
+.login-form .group {
+  margin-bottom: 15px;
 }
 /* 라벨, 입력 필드, 버튼 기본 스타일 */
 .login-form .group .label,
 .login-form .group .input,
-.login-form .group .button{
-  width:100%;
-  color:#fff; /* 텍스트 색상 */
-  display:block;
+.login-form .group .button {
+  width: 100%;
+  color: #fff; /* 텍스트 색상 */
+  display: block;
 }
 /* 입력 필드와 버튼 스타일 */
 .login-form .group .input,
-.login-form .group .button{
-  border:none;
-  padding:15px 20px;
-  border-radius:25px; /* 둥근 모서리 */
-  background:rgba(255,255,255,.1); /* 배경색 */
+.login-form .group .button {
+  border: none;
+  padding: 15px 20px;
+  border-radius: 25px; /* 둥근 모서리 */
+  background: rgba(255, 255, 255, 0.1); /* 배경색 */
 }
 /* 비밀번호 필드 특성 설정 */
-.login-form .group input[data-type="password"]{
-  text-security:circle; /* 원형 비밀번호 마크 */
-  -webkit-text-security:circle;
+.login-form .group input[data-type='password'] {
+  text-security: circle; /* 원형 비밀번호 마크 */
+  -webkit-text-security: circle;
 }
 /* 라벨 기본 스타일 */
-.login-form .group .label{
-  color:#aaa; /* 색상 */
-  font-size:12px;
+.login-form .group .label {
+  color: #aaa; /* 색상 */
+  font-size: 12px;
 }
 /* 버튼 스타일 */
-.login-form .group .button{
-  background:#1161ee; /* 배경색 */
+.login-form .group .button {
+  background: #1161ee; /* 배경색 */
 }
 /* 체크박스 커스텀 아이콘 스타일 */
-.login-form .group label .icon{
-  width:15px;
-  height:15px;
-  border-radius:2px;
-  position:relative;
-  display:inline-block;
-  background:rgba(255,255,255,.1);
+.login-form .group label .icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 2px;
+  position: relative;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
 }
 /* 체크박스 아이콘의 가로 선과 세로 선 스타일 */
 .login-form .group label .icon:before,
-.login-form .group label .icon:after{
-  content:'';
-  width:10px;
-  height:2px;
-  background:#fff; /* 배경색 */
-  position:absolute;
-  transition:all .2s ease-in-out 0s;
+.login-form .group label .icon:after {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: #fff; /* 배경색 */
+  position: absolute;
+  transition: all 0.2s ease-in-out 0s;
 }
 /* 체크박스 아이콘 변환 효과 */
-.login-form .group .check:checked + label .icon{
-  background:#1161ee; /* 배경색 변경 */
+.login-form .group .check:checked + label .icon {
+  background: #1161ee; /* 배경색 변경 */
 }
-.login-form .group .check:checked + label .icon:before{
-  transform:scale(1) rotate(45deg); /* 체크 표시 */
+.login-form .group .check:checked + label .icon:before {
+  transform: scale(1) rotate(45deg); /* 체크 표시 */
 }
-.login-form .group .check:checked + label .icon:after{
-  transform:scale(1) rotate(-45deg); /* 체크 표시 */
+.login-form .group .check:checked + label .icon:after {
+  transform: scale(1) rotate(-45deg); /* 체크 표시 */
 }
 /* 로그인 및 회원가입 폼 활성화 시 변환 */
 .login-html .sign-in:checked + .tab + .sign-up + .tab + .login-form .sign-in-htm,
-.login-html .sign-up:checked + .tab + .login-form .sign-up-htm{
-  transform:rotate(0);
+.login-html .sign-up:checked + .tab + .login-form .sign-up-htm {
+  transform: rotate(0);
 }
 
-/* 구분선 스타일 */
-.hr{
-  height:2px;
-  margin:60px 0 50px 0;
-  background:rgba(255,255,255,.2);
+/* 구분선 스타일 제거 */
+.hr {
+  display: none;
 }
-/* 바닥글 링크 스타일 */
-.foot-lnk{
-  text-align:center;
-}
-/*로고 컨테이너 스타일*/
+
+/* 바닥글 링크 스타일 제거 */
+/*.foot-lnk {
+  text-align: center;
+}*/
+
+/* 로고 컨테이너 스타일 */
 .logo-container {
   text-align: center;
   padding: 20px 0;
-
 }
 /* 로고 이미지 스타일 */
 .login-logo {
   width: 150px; /* 로고의 너비 */
   height: auto; /* 높이를 자동으로 설정하여 비율 유지 */
+}
+
+/* 입력 필드 포커스 스타일 제거 */
+.login-form .group .input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
