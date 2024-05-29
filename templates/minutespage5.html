@@ -59,20 +59,23 @@
       </head>
   <body>
     <header>
-      프로젝트 이름
+        <a href="/mainpage" class="home-link">
+            <img src="{{ url_for('static', filename='images/home.png') }}" alt="Home" class="home-icon">
+        </a>
+        <span class="project-title">{{ project_name }}</span>
     </header>
     <div id="container">
       <div id="sidebar">
-        <a href="/todos" class="nav-item">할 일 목록</a>
-        <a href="/calendar" class="nav-item">캘린더</a>
-        <a href="/minutespage1" class="nav-item active">회의록</a>
+        <a href="/projects/{{ project_id }}/todos" class="nav-item">할 일 목록</a>
+        <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
+        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item active">회의록</a>
         <div class="nav-item">게시판2</div>
       </div>
       <div id="content">
         <div style="width: 1350px; height: 1121px; position: relative; background: #fff;">
             <div style="width: 1224px; height: 134px; position: absolute; left: 0px; top: 10px;">
                 <div style = "position: absolute;left: 696px; top: 66px;">
-                    <button class="cancel_button" onclick="window.location.href='/minutespage4/{{ minute.MinutesID }}';">취소</button>
+                    <button class="cancel_button" onclick="window.location.href='/projects/{{ project_id }}/minutespage4/{{ minute.MinutesID }}';">취소</button>
                 </div>
                 <p
                     style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
@@ -103,7 +106,7 @@
         <div
         style="display: flex; justify-content: flex-start; align-items: flex-start; width: 705px; height: 462px; position: absolute; left: 200px; top: 208px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
         >
-        <form id="myForm" action="{{ url_for('update_minute', minutes_id=minute.MinutesID) }}" method="POST">
+        <form id="myForm" action="{{ url_for('update_minute', project_id=project_id,minutes_id=minute.MinutesID) }}" method="POST">
         <textarea id="content" name="content"
             style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; height: 500px; flex-grow: 1; width: 673px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
             >{{ minute.Content }}

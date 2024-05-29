@@ -1,3 +1,4 @@
+
 header {
     background: #ffffff;
     padding: 20px;
@@ -410,5 +411,18 @@ header {
     display: inline-block; /* 가로 방향 나열 */
     font-size: 14px;
     color: #333; /* 태그 글자색 */
+}
+
+.home-link {
+    position: absolute;
+    left: 20px;
+}
+.home-icon {
+    width: 30px;
+    height: 30px;
+}
+.project-title {
+    font-size: 24px;
+    font-weight: bold;
 }
 

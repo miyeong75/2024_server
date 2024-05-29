@@ -1,3 +1,15 @@
+.home-link {
+  position: absolute;
+  left: 20px;
+}
+.home-icon {
+  width: 30px;
+  height: 30px;
+}
+.project-title {
+  font-size: 24px;
+  font-weight: bold;
+}
 header {
     background: #ffffff;
     padding: 20px;
@@ -67,7 +79,7 @@ header {
     color: inherit; /* 텍스트 색상을 상속 받음 */
     display: block; /* 이 부분이 중요합니다 */
   }
-  
+
 .register_button {
     width: 94px;
     position: absolute;

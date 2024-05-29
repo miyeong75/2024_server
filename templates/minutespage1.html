@@ -28,20 +28,24 @@
   
       // 페이지 이동 함수
       function goToWritePage() {
-        window.location.href = '/minutespage2'; // 'write.html'을 글쓰기 페이지의 URL로 변경하세요.
+        var projectId = "{{ project_id }}"; // Flask에서 전달된 project_id
+        window.location.href = '/projects/' + projectId + '/minutespage2';
       }
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page1.css') }}" />
   </head>
   <body>
     <header>
-      프로젝트 이름
+      <a href="/mainpage" class="home-link">
+        <img src="{{ url_for('static', filename='images/home.png') }}" alt="Home" class="home-icon">
+      </a>
+      <span class="project-title">{{ project_name }}</span>
     </header>
     <div id="container">
       <div id="sidebar">
-        <a href="/todos" class="nav-item">할 일 목록</a>
-        <a href="/calendar" class="nav-item">캘린더</a>
-        <a href="/minutespage1" class="nav-item active">회의록</a>
+        <a href="/projects/{{ project_id }}/todos" class="nav-item">할 일 목록</a>
+        <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
+        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item active">회의록</a>
         <div class="nav-item">게시판2</div>
       </div>
       <div id="content">
@@ -58,7 +62,7 @@
           {% for minute in minutes %}
         <div class="s1">
             <p class="s2">{{ minute.MinutesID }}</p>
-            <a href="/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
+            <a href="/projects/{{ project_id }}/minutespage4/{{ minute.MinutesID }}" style="text-decoration: none; color: black;">
                 <p class="s3">{{ minute.Title }}</p>
                 <div class="hidden-content">{{ minute.Content }}</div>
             </a>
@@ -76,7 +80,7 @@
           </div>
         
               </div>
-              <button onclick="location.href='/minutespage2';" class="write-button">글쓰기</button>
+              <button onclick="location.href='/projects/{{ project_id }}/minutespage2';" class="write-button">글쓰기</button>
               <div style="width: 1224px; height: 134px; position: absolute; left: 156px; top: 40px;">
                 <button onclick="searchFunction()"class="button">검색</button>
                 <div class = "s9">

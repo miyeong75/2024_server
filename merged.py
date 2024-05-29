@@ -116,10 +116,12 @@ def delete_todo(project_id, todo_id):
 # Minutes 관련 라우트 추가
 @app.route('/projects/<int:project_id>/minutes')
 def index(project_id):
-    return render_template('minutesindex.html', project_id=project_id)
+    project_name = get_project_name(project_id)
+    return render_template('minutesindex.html', project_id=project_id, project_name=project_name)
 
 @app.route('/projects/<int:project_id>/minutespage1')
 def page1(project_id):
+    project_name = get_project_name(project_id)
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     
@@ -142,15 +144,18 @@ def page1(project_id):
         else:
             minute['tags'] = []
 
-    return render_template('minutespage1.html', minutes=minutes, project_id=project_id)
+    return render_template('minutespage1.html', minutes=minutes, project_id=project_id, project_name=project_name)
+
 
 @app.route('/projects/<int:project_id>/minutespage2')
 def page2(project_id):
-    return render_template('minutespage2.html', project_id=project_id)
+    project_name = get_project_name(project_id)
+    return render_template('minutespage2.html', project_id=project_id, project_name=project_name)
 
 @app.route('/projects/<int:project_id>/minutespage3')
 def page3_data(project_id):
-    return render_template('minutespage3.html', project_id=project_id)
+    project_name = get_project_name(project_id)
+    return render_template('minutespage3.html', project_id=project_id, project_name=project_name)
 
 @app.route('/api/projects/<int:project_id>/notes')
 def notes_data(project_id):
@@ -206,7 +211,7 @@ def submit(project_id):
         cursor.close()
         conn.close()
 
-    return jsonify({"success": True, "message": "Note saved."})
+    return jsonify({"success": True, "message": "Note saved.", "minutes_id": post_id})
 
 @app.route('/projects/<int:project_id>/minutespage4/<int:minutes_id>')
 def show_minutes(project_id, minutes_id):
@@ -226,7 +231,8 @@ def show_minutes(project_id, minutes_id):
     conn.close()
     
     tag_list = [tag['name'] for tag in tags]
-    return render_template('minutespage4.html', minute=minute, tags=tag_list, project_id=project_id)
+    project_name = get_project_name(project_id)
+    return render_template('minutespage4.html', minute=minute, tags=tag_list, project_id=project_id, project_name=project_name)
 
 @app.route('/projects/<int:project_id>/delete/<int:minutes_id>', methods=['POST'])
 def delete_minutes(project_id, minutes_id):
@@ -305,7 +311,8 @@ def edit_minutes(project_id, minutes_id):
 
 @app.route('/projects/<int:project_id>/minutestest')
 def test222(project_id):
-    return render_template('minutestest.html', project_id=project_id)
+    project_name = get_project_name(project_id)
+    return render_template('minutestest.html', project_id=project_id, project_name=project_name)
 
 # mainpage 라우트 추가
 @app.route('/mainpage')

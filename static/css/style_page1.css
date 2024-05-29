@@ -1,3 +1,15 @@
+.home-link {
+  position: absolute;
+  left: 20px;
+}
+.home-icon {
+  width: 30px;
+  height: 30px;
+}
+.project-title {
+  font-size: 24px;
+  font-weight: bold;
+}
 .button {
   border: none; /* 테두리 제거 */
   color: #454545;
