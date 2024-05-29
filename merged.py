@@ -500,5 +500,198 @@ def get_usernames():
         app.logger.error(f'사용자 조회 중 오류 발생: {str(e)}')
         return jsonify(message=f'사용자 조회에 실패했습니다: {str(e)}'), 500
 
+#게시판 코드
+
+@app.route('/projects/<int:project_id>/boardpage1')
+def boardpage1(project_id):
+    project_name = get_project_name(project_id)
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("""
+        SELECT m.boardsID, m.Title, m.Content, m.CreateDate, m.Author, GROUP_CONCAT(t.name SEPARATOR ',') AS Tags
+        FROM boards m
+        LEFT JOIN board_tags mt ON m.boardsID = mt.boards_id
+        LEFT JOIN minutestagslist t ON mt.tag_id = t.id
+        WHERE m.project_id = %s
+        GROUP BY m.boardsID, m.Title, m.Content, m.CreateDate, m.Author
+    """, (project_id,))
+    boards = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    for board in boards:
+        if board['Tags']:
+            board['tags'] = board['Tags'].split(',')
+        else:
+            board['tags'] = []
+
+    return render_template('boardage1.html', boards=boards, project_id=project_id, project_name=project_name)
+
+
+@app.route('/projects/<int:project_id>/boardpage2')
+def boardpage2(project_id):
+    project_name = get_project_name(project_id)
+    return render_template('boardpage2.html', project_id=project_id, project_name=project_name)
+
+
+@app.route('/api/projects/<int:project_id>/boardnotes')
+def boardnotes_data(project_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT * FROM boards WHERE project_id = %s", (project_id,))
+    notes = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return jsonify(notes)
+
+@app.route('/projects/<int:project_id>/boardsubmit', methods=['POST'])
+def boardsubmit(project_id):
+    data = request.json
+    title = data['title']
+    content = data['content']
+    tags = data['tags']
+    
+    author = 'naboyeong'
+    create_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute(
+            "INSERT INTO boards (Title, Content, Author, CreateDate, project_id) VALUES (%s, %s, %s, %s, %s)",
+            (title, content, author, create_date, project_id)
+        )
+        post_id = cursor.lastrowid
+
+        for tag in tags:
+            tag = tag.strip().lower()
+            cursor.execute("SELECT id FROM boardstagslist WHERE name = %s", (tag,))
+            tag_data = cursor.fetchone()
+
+            if not tag_data:
+                cursor.execute("INSERT INTO boardstagslist (name) VALUES (%s)", (tag,))
+                tag_id = cursor.lastrowid
+            else:
+                tag_id = tag_data[0]
+
+            cursor.execute("INSERT INTO board_tags (boards_id, tag_id) VALUES (%s, %s)", (post_id, tag_id))
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        print(f"Error occurred: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return jsonify({"success": True, "message": "Note saved.", "boards_id": post_id})
+
+@app.route('/projects/<int:project_id>/boardpage4/<int:boards_id>')
+def show_boards(project_id, boards_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM boards WHERE boardsID = %s AND project_id = %s", (boards_id, project_id))
+    board = cursor.fetchone()
+    
+    cursor.execute("""
+        SELECT t.name FROM boardstagslist t
+        JOIN board_tags mt ON t.id = mt.tag_id
+        WHERE mt.boards_id = %s
+    """, (boards_id,))
+    tags = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    tag_list = [tag['name'] for tag in tags]
+    project_name = get_project_name(project_id)
+    return render_template('boardpage4.html', board=board, tags=tag_list, project_id=project_id, project_name=project_name)
+
+@app.route('/projects/<int:project_id>/boards/delete/<int:boards_id>', methods=['POST'])
+def delete_boards(project_id, boards_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM boards WHERE boardsID = %s AND project_id = %s", (boards_id, project_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return redirect(url_for('boardpage1', project_id=project_id))
+
+@app.route('/projects/<int:project_id>/boards/update/<int:boards_id>', methods=['POST'])
+def update_board(project_id, boards_id):
+    title = request.form['title']
+    content = request.form['content']
+    tags_str = request.form.get('tags', '')
+    
+    # 쉼표로 구분된 태그 문자열을 리스트로 변환
+    new_tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
+
+    # 데이터베이스 연결 및 업데이트
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    cursor.execute("UPDATE boards SET Title = %s, Content = %s WHERE boardsID = %s AND project_id = %s", (title, content, boards_id, project_id))
+
+    # 기존 태그를 가져오고 그 이름 목록과 ID 매핑 테이블을 만듭니다.
+    cursor.execute("SELECT t.id, t.name FROM boardstagslist t JOIN board_tags mt ON t.id = mt.tag_id WHERE mt.boards_id = %s", (boards_id,))
+    existing_tags = cursor.fetchall()
+    existing_tag_names = [tag[1] for tag in existing_tags]
+    existing_tag_ids = {tag[1]: tag[0] for tag in existing_tags}
+
+    # 새 태그 추가 로직
+    for tag in new_tags:
+        if tag not in existing_tag_names:
+            cursor.execute("SELECT id FROM boardstagslist WHERE name = %s", (tag,))
+            tag_data = cursor.fetchone()
+            if not tag_data:
+                cursor.execute("INSERT INTO boardstagslist (name) VALUES (%s)", (tag,))
+                tag_id = cursor.lastrowid
+            else:
+                tag_id = tag_data[0]
+
+            cursor.execute("INSERT INTO board_tags (boards_id, tag_id) VALUES (%s, %s)", (boards_id, tag_id))
+
+    # 기존 태그 중 새 태그 리스트에 없는 태그를 제거
+    for existing_tag_name in existing_tag_names:
+        if existing_tag_name not in new_tags:
+            cursor.execute("DELETE FROM board_tags WHERE boards_id = %s AND tag_id = %s", (boards_id, existing_tag_ids[existing_tag_name]))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return redirect(f'/projects/{project_id}/boardpage4/' + str(boards_id))
+
+@app.route('/projects/<int:project_id>/boards/edit/<int:boards_id>')
+def edit_boards(project_id, boards_id):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM boards WHERE boardsID = %s AND project_id = %s", (boards_id, project_id))
+    board = cursor.fetchone()
+    
+    cursor.execute("""
+        SELECT t.name FROM boardstagslist t
+        JOIN board_tags mt ON t.id = mt.tag_id
+        WHERE mt.boards_id = %s
+    """, (boards_id,))
+    tags = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    tag_list = [tag['name'] for tag in tags]
+    
+    return render_template('boardpage5.html', board=board, tags=tag_list, project_id=project_id)
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

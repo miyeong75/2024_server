@@ -68,14 +68,14 @@
       <div id="sidebar">
         <a href="/projects/{{ project_id }}/todos" class="nav-item">할 일 목록</a>
         <a href="/projects/{{ project_id }}/calendar" class="nav-item">캘린더</a>
-        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item active">회의록</a>
-        <a href="/projects/{{ project_id }}/boardpage1" class="nav-item">게시판</a>
+        <a href="/projects/{{ project_id }}/minutespage1" class="nav-item">회의록</a>
+        <a href="/projects/{{ project_id }}/boardpage1" class="nav-item active">게시판</a>
       </div>
       <div id="content">
         <div style="width: 1350px; height: 1121px; position: relative; background: #fff;">
             <div style="width: 1224px; height: 134px; position: absolute; left: 0px; top: 10px;">
                 <div style = "position: absolute;left: 696px; top: 66px;">
-                    <button class="cancel_button" onclick="window.location.href='/projects/{{ project_id }}/minutespage4/{{ minute.MinutesID }}';">취소</button>
+                    <button class="cancel_button" onclick="window.location.href='/projects/{{ project_id }}/boardpage4/{{ board.boardsID }}';">취소</button>
                 </div>
                 <p
                     style="position: absolute; left: 431px; top: 15px; font-size: 20px; font-weight: 600; text-align: left; color: #000;"
@@ -106,10 +106,10 @@
         <div
         style="display: flex; justify-content: flex-start; align-items: flex-start; width: 705px; height: 462px; position: absolute; left: 200px; top: 208px; gap: 8px; padding-left: 16px; padding-right: 16px; padding-top: 12px; padding-bottom: 12px; border-radius: 8px; background: #fff; border-width: 1px; border-color: #e0e0e0; box-shadow: 0px 1px 2px 0 rgba(0,0,0,0.05);"
         >
-        <form id="myForm" action="{{ url_for('update_minute', project_id=project_id,minutes_id=minute.MinutesID) }}" method="POST">
+        <form id="myForm" action="{{ url_for('update_board', project_id=project_id,boards_id=board.boardsID) }}" method="POST">
         <textarea id="content" name="content"
             style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; height: 500px; flex-grow: 1; width: 673px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
-            >{{ minute.Content }}
+            >{{ board.Content }}
         </textarea>
         </div>
         <div
@@ -117,7 +117,7 @@
         >
         <input 
             style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 100%; font-size: 16px; font-weight: 500; text-align: left; color: #828282;"
-            type="text" id="title" name="title" value="{{ minute.Title }}">
+            type="text" id="title" name="title" value="{{ board.Title }}">
         </div>
         <div id="tags" style = "position: absolute; top: 750px; left: 210px; padding-left: 16px; padding-right: 16px;  border-radius: 5px; border: 1px solid #ccc; flex-grow: 0; flex-shrink: 0; width: 706px; font-size: 16px; font-weight: 500; text-align: left; color: #828282;">
             <!-- 기존 태그들이 여기에 미리 채워집니다 -->
