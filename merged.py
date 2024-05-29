@@ -238,6 +238,7 @@ def show_minutes(project_id, minutes_id):
 def delete_minutes(project_id, minutes_id):
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("DELETE FROM minute_tags WHERE Minutes_id = %s", (minutes_id,))
     cursor.execute("DELETE FROM Minutes WHERE MinutesID = %s AND project_id = %s", (minutes_id, project_id))
     conn.commit()
     cursor.close()
@@ -512,7 +513,7 @@ def boardpage1(project_id):
         SELECT m.boardsID, m.Title, m.Content, m.CreateDate, m.Author, GROUP_CONCAT(t.name SEPARATOR ',') AS Tags
         FROM boards m
         LEFT JOIN board_tags mt ON m.boardsID = mt.boards_id
-        LEFT JOIN minutestagslist t ON mt.tag_id = t.id
+        LEFT JOIN boardstagslist t ON mt.tag_id = t.id
         WHERE m.project_id = %s
         GROUP BY m.boardsID, m.Title, m.Content, m.CreateDate, m.Author
     """, (project_id,))
@@ -527,7 +528,7 @@ def boardpage1(project_id):
         else:
             board['tags'] = []
 
-    return render_template('boardage1.html', boards=boards, project_id=project_id, project_name=project_name)
+    return render_template('boardpage1.html', boards=boards, project_id=project_id, project_name=project_name)
 
 
 @app.route('/projects/<int:project_id>/boardpage2')
@@ -617,6 +618,7 @@ def show_boards(project_id, boards_id):
 def delete_boards(project_id, boards_id):
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("DELETE FROM board_tags WHERE boards_id = %s", (boards_id,))
     cursor.execute("DELETE FROM boards WHERE boardsID = %s AND project_id = %s", (boards_id, project_id))
     conn.commit()
     cursor.close()

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회의록</title>
+    <title>게시글</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style_page3.css') }}" />
     <script>
         // 페이지 로드 시 실행되는 함수
@@ -16,8 +16,8 @@
           }
           
           function confirmDelete() {
-            const minutesId = document.getElementById('deleteButton').getAttribute('data-id');
-            fetch('/projects/{{ project_id }}/boards/delete/' + minutesId, { method: 'POST' })
+            const boardsId = document.getElementById('deleteButton').getAttribute('data-id');
+            fetch('/projects/{{ project_id }}/boards/delete/' + boardsId, { method: 'POST' })
               .then(response => {
                 if (response.ok) {
                   alert('문서가 삭제되었습니다.');
@@ -83,7 +83,7 @@
             <div class="container">
             <div class="sub-container">
                 <p class="heading">
-                    회의록
+                    게시글
                 </p>
                 <button class="button red-button" id="deleteButton" data-id="{{ board.boardsID }}" onclick="showModal();">삭제</button>
             <button class="button blue-button" onclick="window.location.href='/projects/{{ project_id }}/boardpage1';">목록</button>

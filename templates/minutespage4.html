@@ -43,7 +43,7 @@
         function submitEdit(minutesId) {
             const title = document.getElementById('editTitle').value;
             const content = document.getElementById('editContent').value;
-            fetch('/projects/{{ project_id }}/update/' + minutesId, {
+            fetch('/projects/{{ project_id }}/minutes/update/' + minutesId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
