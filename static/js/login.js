@@ -10,12 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // 서버로 로그인 요청 보내기
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username, password }),
+                credentials: 'include'  // 쿠키 포함 설정
             });
 
             // 로그인 응답 처리
@@ -31,12 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Login Success:', data.message);
             alert('Login Success!'); // 성공 메시지를 사용자에게 알림
 
-            // 로그인 성공 후 처리, 예: 메인 페이지로 리다이렉션
-            window.location.href = 'http://127.0.0.1:5500/main.html'; // 성공 시 리다이렉션할 경로로 변경하세요
+            // 로그인 성공 후 메인 페이지로 리디렉션
+            window.location.href = '/mainpage';
 
         } catch (error) {
             console.error('Login Error:', error);
             alert('Login Error: An error occurred while processing your request.'); // 네트워크 오류 등의 경우 사용자에게 알림
         }
     });
-})
+});

@@ -1,7 +1,9 @@
 import mysql.connector
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}})  # CORS 설정
@@ -13,9 +15,10 @@ bcrypt = Bcrypt()
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="root",
+    password="2802",
     database="teamteam"
 )
+
 cursor = db.cursor()
 
 # 회원가입 처리를 위한 POST 라우트
@@ -54,5 +57,67 @@ def login():
 
     return jsonify({'message': 'Login successful'}), 200
 
+
+
+@app.route('/loginmain')
+def login2():
+    return render_template('login.html')
+
+
+
+@app.route('/mainpage')
+def get_projects():
+    try:
+        conn = db
+        cursor = conn.cursor()
+
+        user_name = "user1"
+        #user_name = request.cookies.get('username')
+        select_query = """
+        SELECT t.* 
+        FROM team t 
+        JOIN team_members tm ON tm.project_id = t.project_id 
+        WHERE tm.member_name = %s
+    """
+        cursor.execute(select_query, (user_name, ))
+        projects = []
+
+        for (project_id, project_name) in cursor.fetchall():  # fetchall()로 결과 가져오기
+            project_info = {
+                'project_id': project_id,
+                'project_name': project_name,
+                'members': [],
+                'tags': []
+            }
+
+            # 팀원 정보 조회
+            select_members_query = "SELECT member_name FROM team_members WHERE project_id = %s"
+            cursor.execute(select_members_query, (project_id,))
+            members_result = cursor.fetchall()
+
+            for (member_name,) in members_result:
+                project_info['members'].append(member_name)
+
+            # 태그 정보 조회
+            select_tags_query = "SELECT tag_name FROM project_tags WHERE project_id = %s"
+            cursor.execute(select_tags_query, (project_id,))
+            tags_result = cursor.fetchall()
+
+            for (tag_name,) in tags_result:
+                project_info['tags'].append(tag_name)
+
+            projects.append(project_info)
+
+        cursor.close()
+        conn.close()
+
+        return render_template('mainpage.html', projects=projects)
+
+    except Exception as e:
+        app.logger.error(f'프로젝트 조회 중 오류 발생: {str(e)}')
+        return jsonify(message=f'프로젝트 조회에 실패했습니다: {str(e)}'), 500
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(debug=True)

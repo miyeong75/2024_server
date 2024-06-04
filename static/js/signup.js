@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log('Username:', username, 'Password:', password, 'Repeat Password:', repeatPassword, 'Email:', email);
 
-        fetch('http://localhost:3000/register', {
+        fetch('/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

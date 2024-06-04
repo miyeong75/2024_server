@@ -1,8 +1,13 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, make_response
-from datetime import datetime
+from flask import Flask, request, jsonify, make_response, render_template, url_for, redirect
+from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 import mysql.connector
+from datetime import datetime
+
 
 app = Flask(__name__)
+#CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:5500"}}, supports_credentials=True)
+bcrypt = Bcrypt(app)
 
 # 데이터베이스 연결 설정
 db_config = {
@@ -28,21 +33,20 @@ def get_project_name(project_id):
 # 루트 경로 - 할 일 목록 페이지 렌더링
 @app.route('/projects/<int:project_id>/todos')
 def index_todos(project_id):
-    project_name = get_project_name(project_id)  # 프로젝트 이름 조회
-    return render_template('todos.html', project_id=project_id, project_name=project_name)  # 프로젝트 이름 전달
+    project_name = get_project_name(project_id)
+    return render_template('todos.html', project_id=project_id, project_name=project_name)
 
 # 캘린더 페이지 라우트 추가
 @app.route('/projects/<int:project_id>/calendar')
 def calendar(project_id):
-    project_name = get_project_name(project_id)  # 프로젝트 이름 조회
-    return render_template('calendar.html', project_id=project_id, project_name=project_name)  # 프로젝트 이름 전달
+    project_name = get_project_name(project_id)
+    return render_template('calendar.html', project_id=project_id, project_name=project_name)
 
 # mypage 라우트 추가
 @app.route('/mypage')
-def mypage(project_id = 1):
-    project_name = get_project_name(project_id)  # 프로젝트 이름 조회
-    username = request.cookies.get('username')
-    return render_template('mypage.html', project_id=project_id, project_name=project_name, username = username)  # 프로젝트 이름 전달
+def mypage(project_id=1):
+    project_name = get_project_name(project_id)
+    return render_template('mypage.html', project_id=project_id, project_name=project_name)
 
 # 할 일 목록 가져오기
 @app.route('/api/projects/<int:project_id>/todos', methods=['GET'])
@@ -147,13 +151,10 @@ def page1(project_id):
 
     return render_template('minutespage1.html', minutes=minutes, project_id=project_id, project_name=project_name)
 
-
 @app.route('/projects/<int:project_id>/minutespage2')
 def page2(project_id):
     project_name = get_project_name(project_id)
     return render_template('minutespage2.html', project_id=project_id, project_name=project_name)
-
-
 
 @app.route('/projects/<int:project_id>/minutessubmit', methods=['POST'])
 def submit(project_id):
@@ -162,7 +163,7 @@ def submit(project_id):
     content = data['content']
     tags = data['tags']
     
-    author = request.cookies.get('username')
+    author = 'naboyeong'
     create_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     conn = get_db_connection()
@@ -236,21 +237,17 @@ def update_minute(project_id, minutes_id):
     content = request.form['content']
     tags_str = request.form.get('tags', '')
     
-    # 쉼표로 구분된 태그 문자열을 리스트로 변환
     new_tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
 
-    # 데이터베이스 연결 및 업데이트
-    conn = mysql.connector.connect(**db_config)
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE Minutes SET Title = %s, Content = %s WHERE MinutesID = %s AND project_id = %s", (title, content, minutes_id, project_id))
 
-    # 기존 태그를 가져오고 그 이름 목록과 ID 매핑 테이블을 만듭니다.
     cursor.execute("SELECT t.id, t.name FROM minutestagslist t JOIN minute_tags mt ON t.id = mt.tag_id WHERE mt.Minutes_id = %s", (minutes_id,))
     existing_tags = cursor.fetchall()
     existing_tag_names = [tag[1] for tag in existing_tags]
     existing_tag_ids = {tag[1]: tag[0] for tag in existing_tags}
 
-    # 새 태그 추가 로직
     for tag in new_tags:
         if tag not in existing_tag_names:
             cursor.execute("SELECT id FROM minutestagslist WHERE name = %s", (tag,))
@@ -263,7 +260,6 @@ def update_minute(project_id, minutes_id):
 
             cursor.execute("INSERT INTO minute_tags (Minutes_id, tag_id) VALUES (%s, %s)", (minutes_id, tag_id))
 
-    # 기존 태그 중 새 태그 리스트에 없는 태그를 제거
     for existing_tag_name in existing_tag_names:
         if existing_tag_name not in new_tags:
             cursor.execute("DELETE FROM minute_tags WHERE Minutes_id = %s AND tag_id = %s", (minutes_id, existing_tag_ids[existing_tag_name]))
@@ -295,29 +291,29 @@ def edit_minutes(project_id, minutes_id):
     
     return render_template('minutespage5.html', minute=minute, tags=tag_list, project_id=project_id)
 
-
-
-# mainpage 라우트 추가
 @app.route('/mainpage')
 def get_projects():
     try:
-        user_name = request.cookies.get('username')
-        if not user_name:
-            return redirect(url_for('login2'))
-
         conn = get_db_connection()
         cursor = conn.cursor()
+        
+        # 쿠키에서 사용자 이름 가져오기
+        user_name = request.cookies.get('username')
+        if not user_name:
+            return jsonify({'message': 'User not logged in'}), 401
 
+        print(f"Fetched username from cookie: {user_name}")  # 디버깅을 위한 출력
+        
         select_query = """
         SELECT t.* 
         FROM team t 
         JOIN team_members tm ON tm.project_id = t.project_id 
         WHERE tm.member_name = %s
     """
-        cursor.execute(select_query, (user_name, ))
+        cursor.execute(select_query, (user_name,))
         projects = []
 
-        for (project_id, project_name) in cursor.fetchall():  # fetchall()로 결과 가져오기
+        for (project_id, project_name) in cursor.fetchall():
             project_info = {
                 'project_id': project_id,
                 'project_name': project_name,
@@ -325,7 +321,6 @@ def get_projects():
                 'tags': []
             }
 
-            # 팀원 정보 조회
             select_members_query = "SELECT member_name FROM team_members WHERE project_id = %s"
             cursor.execute(select_members_query, (project_id,))
             members_result = cursor.fetchall()
@@ -333,7 +328,6 @@ def get_projects():
             for (member_name,) in members_result:
                 project_info['members'].append(member_name)
 
-            # 태그 정보 조회
             select_tags_query = "SELECT tag_name FROM project_tags WHERE project_id = %s"
             cursor.execute(select_tags_query, (project_id,))
             tags_result = cursor.fetchall()
@@ -352,7 +346,6 @@ def get_projects():
         app.logger.error(f'프로젝트 조회 중 오류 발생: {str(e)}')
         return jsonify(message=f'프로젝트 조회에 실패했습니다: {str(e)}'), 500
 
-
 @app.route('/addProject', methods=['POST'])
 def add_project():
     data = request.json
@@ -368,24 +361,20 @@ def add_project():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 프로젝트 정보 삽입
         insert_project_query = "INSERT INTO team (project_name) VALUES (%s)"
         cursor.execute(insert_project_query, (project_name,))
         project_id = cursor.lastrowid
 
-        # 팀원 정보 삽입
         for member in members.split(","):
-            member_name = member.strip()  # 공백 제거
+            member_name = member.strip()
             insert_member_query = "INSERT INTO team_members (project_id, member_name) VALUES (%s, %s)"
             cursor.execute(insert_member_query, (project_id, member_name))
 
-        # 태그 정보 삽입
         for tag in tags.split(","):
             tag_name = tag.strip()
             insert_tag_query = "INSERT INTO project_tags (project_id, tag_name) VALUES (%s, %s)"
             cursor.execute(insert_tag_query, (project_id, tag_name))
 
-        # 변경 사항 커밋
         conn.commit()
         cursor.close()
         conn.close()
@@ -402,7 +391,7 @@ def update_project():
     updated_project_name = data.get('newName')
     updated_members = data.get('newMembers')
     updated_tags = data.get('newTags')
-    project_id = data.get('projectId')  # 프로젝트 ID를 요청에서 받아옴
+    project_id = data.get('projectId')
 
     if not project_id or not updated_project_name or not updated_members or not updated_tags:
         return jsonify(message='모든 필드를 입력해야 합니다.'), 400
@@ -411,31 +400,25 @@ def update_project():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 프로젝트 정보 업데이트
         update_project_query = "UPDATE team SET project_name = %s WHERE project_id = %s"
         cursor.execute(update_project_query, (updated_project_name, project_id))
 
-        # 기존 팀원 정보 삭제
         delete_members_query = "DELETE FROM team_members WHERE project_id = %s"
         cursor.execute(delete_members_query, (project_id,))
 
-        # 수정된 팀원 정보 삽입
         for member in updated_members.split(","):
-            member_name = member.strip()  # 공백 제거
+            member_name = member.strip()
             insert_member_query = "INSERT INTO team_members (project_id, member_name) VALUES (%s, %s)"
             cursor.execute(insert_member_query, (project_id, member_name))
 
-        # 기존 태그 정보 삭제
         delete_tags_query = "DELETE FROM project_tags WHERE project_id = %s"
         cursor.execute(delete_tags_query, (project_id,))
 
-        # 수정된 태그 정보 삽입
         for tag in updated_tags.split(","):
             tag_name = tag.strip()
             insert_tag_query = "INSERT INTO project_tags (project_id, tag_name) VALUES (%s, %s)"
             cursor.execute(insert_tag_query, (project_id, tag_name))
 
-        # 변경 사항 커밋
         conn.commit()
         cursor.close()
         conn.close()
@@ -452,11 +435,9 @@ def delete_project(project_id):
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # 프로젝트 삭제
         delete_project_query = "DELETE FROM team WHERE project_id = %s"
         cursor.execute(delete_project_query, (project_id,))
 
-        # 변경 사항 커밋
         conn.commit()
         cursor.close()
         conn.close()
@@ -486,8 +467,7 @@ def get_usernames():
         app.logger.error(f'사용자 조회 중 오류 발생: {str(e)}')
         return jsonify(message=f'사용자 조회에 실패했습니다: {str(e)}'), 500
 
-#게시판 코드
-
+# 게시판 코드
 @app.route('/projects/<int:project_id>/boardpage1')
 def boardpage1(project_id):
     project_name = get_project_name(project_id)
@@ -515,14 +495,10 @@ def boardpage1(project_id):
 
     return render_template('boardpage1.html', boards=boards, project_id=project_id, project_name=project_name)
 
-
 @app.route('/projects/<int:project_id>/boardpage2')
 def boardpage2(project_id):
     project_name = get_project_name(project_id)
     return render_template('boardpage2.html', project_id=project_id, project_name=project_name)
-
-
-
 
 @app.route('/projects/<int:project_id>/boardsubmit', methods=['POST'])
 def boardsubmit(project_id):
@@ -531,7 +507,7 @@ def boardsubmit(project_id):
     content = data['content']
     tags = data['tags']
     
-    author = request.cookies.get('username')
+    author = 'naboyeong'
     create_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     conn = get_db_connection()
@@ -605,21 +581,17 @@ def update_board(project_id, boards_id):
     content = request.form['content']
     tags_str = request.form.get('tags', '')
     
-    # 쉼표로 구분된 태그 문자열을 리스트로 변환
     new_tags = [tag.strip().lower() for tag in tags_str.split(',') if tag.strip()]
 
-    # 데이터베이스 연결 및 업데이트
-    conn = mysql.connector.connect(**db_config)
+    conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE boards SET Title = %s, Content = %s WHERE boardsID = %s AND project_id = %s", (title, content, boards_id, project_id))
 
-    # 기존 태그를 가져오고 그 이름 목록과 ID 매핑 테이블을 만듭니다.
     cursor.execute("SELECT t.id, t.name FROM boardstagslist t JOIN board_tags mt ON t.id = mt.tag_id WHERE mt.boards_id = %s", (boards_id,))
     existing_tags = cursor.fetchall()
     existing_tag_names = [tag[1] for tag in existing_tags]
     existing_tag_ids = {tag[1]: tag[0] for tag in existing_tags}
 
-    # 새 태그 추가 로직
     for tag in new_tags:
         if tag not in existing_tag_names:
             cursor.execute("SELECT id FROM boardstagslist WHERE name = %s", (tag,))
@@ -632,7 +604,6 @@ def update_board(project_id, boards_id):
 
             cursor.execute("INSERT INTO board_tags (boards_id, tag_id) VALUES (%s, %s)", (boards_id, tag_id))
 
-    # 기존 태그 중 새 태그 리스트에 없는 태그를 제거
     for existing_tag_name in existing_tag_names:
         if existing_tag_name not in new_tags:
             cursor.execute("DELETE FROM board_tags WHERE boards_id = %s AND tag_id = %s", (boards_id, existing_tag_ids[existing_tag_name]))
@@ -664,62 +635,60 @@ def edit_boards(project_id, boards_id):
     
     return render_template('boardpage5.html', board=board, tags=tag_list, project_id=project_id)
 
-
-
-#로그인
-@app.route('/loginmain')
-def login2():
-    return render_template('login.html')
-
-# 로그인 처리 라우트
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
+# 회원가입 처리를 위한 POST 라우트
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data['username']
+    password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+    email = data['email']
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT password FROM users WHERE username = %s", (username,))
+
+    cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
     user = cursor.fetchone()
-    cursor.close()
-    conn.close()
+    if user:
+        return jsonify({'message': 'Username already exists'}), 409
 
-    if user and user[0] == password:
-        response = make_response(jsonify(success=True))
-        response.set_cookie('username', username)
-        return response
-    else:
-        return jsonify(success=False, message="잘못된 사용자 이름 또는 비밀번호입니다.")
-
-# 회원가입 처리 라우트
-@app.route('/signup', methods=['POST'])
-def signup():
-    username = request.form['username']
-    password = request.form['password']
-    email = request.form['email']
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # 사용자 이름 중복 확인
-    cursor.execute("SELECT username FROM users WHERE username = %s", (username,))
-    existing_user = cursor.fetchone()
-    
-    if existing_user:
-        cursor.close()
-        conn.close()
-        return jsonify(success=False, message="이미 존재하는 사용자 이름입니다.")
-    
-    # 새로운 사용자 추가
-    cursor.execute("INSERT INTO users (username, password, email) VALUES (%s, %s, %s)", 
-                   (username, password, email))
+    cursor.execute('INSERT INTO users (username, password, email) VALUES (%s, %s, %s)', (username, password, email))
     conn.commit()
     cursor.close()
     conn.close()
-    
-    return jsonify(success=True)
+
+    return jsonify({'message': 'User registered successfully'}), 201
+
+# 로그인 처리를 위한 POST 라우트
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data['username']
+    password = data['password']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+    user = cursor.fetchone()
+    if not user:
+        return jsonify({'message': 'Username does not exist'}), 401
+
+    hashed_password = user[2]
+    if not bcrypt.check_password_hash(hashed_password, password):
+        return jsonify({'message': 'Password is incorrect'}), 401
+
+    cursor.close()
+    conn.close()
+
+    # 로그인 성공 시 쿠키에 사용자 이름 저장
+    resp = make_response(jsonify({'message': 'Login successful'}), 200)
+    resp.set_cookie('username', username)  # 사용자 이름을 쿠키에 저장
+    return resp
 
 
+@app.route('/loginmain')
+def loginmain():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
