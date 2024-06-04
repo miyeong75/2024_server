@@ -4,12 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login and Signup</title>
-  <!-- CSS 스타일시트 연결: 외부 CSS 파일인 'style.css'를 현재 HTML 문서에 적용하기 위한 링크 -->
-  <link rel="stylesheet" type="text/css" href="stylelogin.css">
-  <!-- JavaScript 파일 연결 -->
-  <script src="signup.js" defer></script>
-  <script src="login.js" defer></script>
-  <!--<script src="forgot_password.js" defer></script>-->
+  <link rel="stylesheet" href="../static/css/stylelogin.css" />
+  <link rel="icon" type="image/png" href="../static/images/logo.png" />
+  <link rel="icon" type="image/png" href="../static/images/logo.png" />
 </head>
 <body>
   <div class="login-wrap">
@@ -21,39 +18,36 @@
       <div class="login-form">
         <div class="sign-in-htm">
           <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="login-logo">
+            <img src="../static/images/logo.png" alt="Logo" class="login-logo">
           </div>
-          <form id="loginForm">
+          <form id="loginForm" action="/login" method="post">
             <div class="group">
               <label for="login-username" class="label">Username</label>
               <input id="login-username" type="text" class="input" name="username">
             </div>
             <div class="group">
               <label for="login-password" class="label">Password</label>
-              <input id="login-password" type="password" class="input" data-type="password" name="password">
+              <input id="login-password" type="password" class="input" name="password">
             </div>
             <div class="group">
               <input type="submit" class="button" value="Sign In">
             </div>
             <div class="hr"></div>
-            <!--<div class="foot-lnk">
-              <a id="forgot-password-link" href="#">Forgot Password?</a>
-            </div>-->
           </form>
         </div>
         <div class="sign-up-htm">
-          <form id="signupForm">
+          <form id="signupForm" action="/signup" method="post">
             <div class="group">
               <label for="signup-user" class="label">Username</label>
               <input id="signup-user" type="text" class="input" name="username">
             </div>
             <div class="group">
               <label for="signup-pass" class="label">Password</label>
-              <input id="signup-pass" type="password" class="input" data-type="password" name="password">
+              <input id="signup-pass" type="password" class="input" name="password">
             </div>
             <div class="group">
               <label for="signup-repeat-pass" class="label">Repeat Password</label>
-              <input id="signup-repeat-pass" type="password" class="input" data-type="password" name="repeat_password">
+              <input id="signup-repeat-pass" type="password" class="input" name="repeat_password">
             </div>
             <div class="group">
               <label for="signup-email" class="label">Email Address</label>
@@ -68,34 +62,55 @@
       </div>
     </div>
   </div>
-<!-- 
-  <div id="forgot-password-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <form id="forgot-password-form">
-        <div class="group">
-          <label for="forgot-username" class="label">Username</label>
-          <input id="forgot-username" type="text" class="input" name="username">
-        </div>
-        <div class="group">
-          <label for="forgot-email" class="label">Email</label>
-          <input id="forgot-email" type="email" class="input" name="email">
-        </div>
-        <div class="group">
-          <input type="submit" class="button" value="Send Verification Code">
-        </div>
-      </form>
-      <form id="verify-code-form" style="display:none;">
-        <div class="group">
-          <label for="verification-code" class="label">Verification Code</label>
-          <input id="verification-code" type="text" class="input" name="verification_code">
-        </div>
-        <div class="group">
-          <input type="submit" class="button" value="Verify and Show Password">
-        </div>
-      </form>
-    </div>
-  </div>
- -->
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // 폼 제출 기본 동작 방지
+    
+      var formData = new FormData(event.target);
+      fetch('/login', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('로그인 성공');
+          window.location.href = '/mainpage'; // 메인 페이지로 리디렉션
+        } else {
+          alert('로그인 실패: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('로그인 중 오류가 발생했습니다.');
+      });
+    });
+    
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // 폼 제출 기본 동작 방지
+    
+      var formData = new FormData(event.target);
+      fetch('/signup', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('회원가입 성공');
+          window.location.href = '/loginmain'; // 로그인 페이지로 리디렉션
+        } else {
+          alert('회원가입 실패: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('회원가입 중 오류가 발생했습니다.');
+      });
+    });
+    
+  </script>
 </body>
 </html>
+
+

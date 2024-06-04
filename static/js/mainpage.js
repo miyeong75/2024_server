@@ -363,3 +363,7 @@ function goToTodos(element) {
 function goToMypage() {
     window.location.href = `/mypage`;
 }
+
+function goToLogin() {
+  window.location.href = `/loginmain`;
+}
