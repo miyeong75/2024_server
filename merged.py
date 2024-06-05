@@ -32,6 +32,7 @@ def get_project_id_by_user_name(user_name):
     project_ids = [row[0] for row in cursor.fetchall()]
     cursor.close()
     connection.close()
+    print(project_ids)
     return project_ids
 
 # 루트 경로 - 할 일 목록 페이지 렌더링
@@ -69,16 +70,20 @@ def get_todos(project_id):
 # 여러 할 일 목록 가져오기
 @app.route('/api/multiple_projects_todos', methods=['GET'])
 def get_multiple_projects_todos():
-    project_ids = request.args.getlist('project_ids')
-    if not project_ids:
+    project_ids_str = request.args.get('project_ids')
+    if not project_ids_str:
         return jsonify([])
+
+    # Split the comma-separated project IDs and convert them to integers
+    project_ids = [int(pid) for pid in project_ids_str.split(',')]
 
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
+    todos = []
     try:
-        format_strings = ','.join(['%s'] * len(project_ids))
-        cursor.execute(f"SELECT id, description, deadline, completed FROM todos WHERE project_id IN ({format_strings})", tuple(project_ids))
-        todos = cursor.fetchall()
+        for project_id in project_ids:
+            cursor.execute("SELECT id, description, deadline, completed, project_id FROM todos WHERE project_id = %s", (project_id,))
+            todos.extend(cursor.fetchall())
         return jsonify(todos)
     finally:
         cursor.close()

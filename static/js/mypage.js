@@ -51,7 +51,7 @@ function createCalendar(year, month) {
 // Fetch todos based on year and month
 function fetchTodos(year, month) {
     const projectIds = JSON.parse(document.querySelector('script[data-project-ids]').getAttribute('data-project-ids')); // Fetch project IDs from the script tag
-    fetch(`/api/multiple_projects_todos?project_ids=${projectIds.join(',')}&year=${year}&month=${month + 1}`)
+    fetch(`/api/multiple_projects_todos?project_ids=${projectIds.join(',')}`)
         .then(response => response.json())
         .then(todos => {
             todos.forEach(todo => {
