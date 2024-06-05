@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaskApp</title>
-<link rel="icon" type="image/png" href="../static/images/logo.png" />
 <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 </head>
 <body>
 
 <header>
-  {{username}}
+  {{ user_name }}
 </header>
 
 <div id="container">
@@ -26,6 +25,7 @@
   </div>
 </div>
 
+<script data-project-ids="{{ project_id|tojson }}"></script>
 <script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
 
 </body>

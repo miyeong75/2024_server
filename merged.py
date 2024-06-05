@@ -7,7 +7,7 @@ app = Flask(__name__)
 # 데이터베이스 연결 설정
 db_config = {
     'user': 'root',
-    'password': '2802',
+    'password': 'root',
     'host': 'localhost',
     'database': 'teamteam'
 }
@@ -25,6 +25,15 @@ def get_project_name(project_id):
     connection.close()
     return project_name
 
+def get_project_id_by_user_name(user_name):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT project_id FROM team_members WHERE member_name = %s", (user_name,))
+    project_ids = [row[0] for row in cursor.fetchall()]
+    cursor.close()
+    connection.close()
+    return project_ids
+
 # 루트 경로 - 할 일 목록 페이지 렌더링
 @app.route('/projects/<int:project_id>/todos')
 def index_todos(project_id):
@@ -39,10 +48,10 @@ def calendar(project_id):
 
 # mypage 라우트 추가
 @app.route('/mypage')
-def mypage(project_id = 1):
-    project_name = get_project_name(project_id)  # 프로젝트 이름 조회
-    username = request.cookies.get('username')
-    return render_template('mypage.html', project_id=project_id, project_name=project_name, username = username)  # 프로젝트 이름 전달
+def mypage():
+    user_name = request.cookies.get('username')
+    project_ids = get_project_id_by_user_name(user_name)  # 프로젝트 이름 조회
+    return render_template('mypage.html', project_id=project_ids, user_name=user_name)  # 프로젝트 이름 전달
 
 # 할 일 목록 가져오기
 @app.route('/api/projects/<int:project_id>/todos', methods=['GET'])
@@ -51,6 +60,24 @@ def get_todos(project_id):
     cursor = connection.cursor(dictionary=True)
     try:
         cursor.execute("SELECT id, description, deadline, completed FROM todos WHERE project_id = %s", (project_id,))
+        todos = cursor.fetchall()
+        return jsonify(todos)
+    finally:
+        cursor.close()
+        connection.close()
+
+# 여러 할 일 목록 가져오기
+@app.route('/api/multiple_projects_todos', methods=['GET'])
+def get_multiple_projects_todos():
+    project_ids = request.args.getlist('project_ids')
+    if not project_ids:
+        return jsonify([])
+
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    try:
+        format_strings = ','.join(['%s'] * len(project_ids))
+        cursor.execute(f"SELECT id, description, deadline, completed FROM todos WHERE project_id IN ({format_strings})", tuple(project_ids))
         todos = cursor.fetchall()
         return jsonify(todos)
     finally:
