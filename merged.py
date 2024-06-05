@@ -309,7 +309,7 @@ def get_projects():
         cursor = conn.cursor()
 
         select_query = """
-        SELECT t.* 
+        SELECT t.project_id, t.project_name 
         FROM team t 
         JOIN team_members tm ON tm.project_id = t.project_id 
         WHERE tm.member_name = %s
@@ -351,6 +351,63 @@ def get_projects():
     except Exception as e:
         app.logger.error(f'프로젝트 조회 중 오류 발생: {str(e)}')
         return jsonify(message=f'프로젝트 조회에 실패했습니다: {str(e)}'), 500
+    
+    
+@app.route('/projectspublic')  
+def get_projects_public():
+    try:
+        user_name = request.cookies.get('username')
+        if not user_name:
+            return redirect(url_for('login2'))
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        print("1")
+        select_query = """
+        SELECT t.project_id, t.project_name 
+        FROM team t 
+        WHERE t.Project_Public = 1
+    """
+        cursor.execute(select_query)
+        projects = []
+
+        print("1")
+        for (project_id, project_name) in cursor.fetchall():  # fetchall()로 결과 가져오기
+            project_info = {
+                'project_id': project_id,
+                'project_name': project_name,
+                'members': [],
+                'tags': []
+            }
+
+            # 팀원 정보 조회
+            select_members_query = "SELECT member_name FROM team_members WHERE project_id = %s"
+            cursor.execute(select_members_query, (project_id,))
+            members_result = cursor.fetchall()
+
+            for (member_name,) in members_result:
+                project_info['members'].append(member_name)
+
+            # 태그 정보 조회
+            select_tags_query = "SELECT tag_name FROM project_tags WHERE project_id = %s"
+            cursor.execute(select_tags_query, (project_id,))
+            tags_result = cursor.fetchall()
+
+            for (tag_name,) in tags_result:
+                project_info['tags'].append(tag_name)
+
+            projects.append(project_info)
+
+        print("1")
+        cursor.close()
+        conn.close()
+
+        return render_template('publicproject.html', projects=projects)
+
+    except Exception as e:
+        app.logger.error(f'프로젝트 조회 중 오류 발생: {str(e)}')
+        return jsonify(message=f'프로젝트 조회에 실패했습니다: {str(e)}'), 500
 
 
 @app.route('/addProject', methods=['POST'])
@@ -360,6 +417,7 @@ def add_project():
     project_name = data.get('projectName')
     members = data.get('projectMembers')
     tags = data.get('projectTags')
+    project_Public = int(data.get('projectPublic', 0)) #공개일경우 1, 기본은 비공개 0 
 
     if not project_name or not members or not tags:
         return jsonify(message='모든 필드를 입력해야 합니다.'), 400
@@ -369,8 +427,8 @@ def add_project():
         cursor = conn.cursor()
 
         # 프로젝트 정보 삽입
-        insert_project_query = "INSERT INTO team (project_name) VALUES (%s)"
-        cursor.execute(insert_project_query, (project_name,))
+        insert_project_query = "INSERT INTO team (project_name, Project_Public) VALUES (%s, %s)"
+        cursor.execute(insert_project_query, (project_name, project_Public))
         project_id = cursor.lastrowid
 
         # 팀원 정보 삽입
@@ -485,6 +543,46 @@ def get_usernames():
     except Exception as e:
         app.logger.error(f'사용자 조회 중 오류 발생: {str(e)}')
         return jsonify(message=f'사용자 조회에 실패했습니다: {str(e)}'), 500
+
+
+
+@app.route('/joinProject', methods=['POST'])
+def join_project():
+    try:
+        data = request.json
+        project_id = data.get('projectId')
+        user_name = request.cookies.get('username')
+
+        if not project_id or not user_name:
+            return jsonify(success=False, message='프로젝트 ID와 사용자명을 확인하세요.'), 400
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # 사용자가 이미 팀원인지 확인
+        check_member_query = "SELECT * FROM team_members WHERE project_id = %s AND member_name = %s"
+        cursor.execute(check_member_query, (project_id, user_name))
+        if cursor.fetchone():
+            return jsonify(success=False, message='이미 프로젝트 팀원입니다.'), 400
+
+        # 팀원으로 추가
+        add_member_query = "INSERT INTO team_members (project_id, member_name) VALUES (%s, %s)"
+        cursor.execute(add_member_query, (project_id, user_name))
+
+        # 변경 사항 커밋
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify(success=True, message='프로젝트에 성공적으로 참여했습니다.'), 200
+
+    except Exception as e:
+        app.logger.error(f'프로젝트 참여 중 오류 발생: {str(e)}')
+        return jsonify(success=False, message=f'프로젝트 참여에 실패했습니다: {str(e)}'), 500
+
+
+
+
 
 #게시판 코드
 

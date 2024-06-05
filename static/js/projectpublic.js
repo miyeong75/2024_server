@@ -148,6 +148,7 @@ function addProject() {
   const projectName = document.getElementById("newProjectName").value.trim();
   const projectMembers = addedMembers.join(", ");
   const projectTags = document.getElementById("newProjectTags").value.trim();
+  const projectPublic = 1; //공개설정
 
   if (projectName === "" || projectMembers === "" || projectTags === "") {
     alert("프로젝트명, 팀원, 태그를 모두 입력해주세요.");
@@ -161,6 +162,7 @@ function addProject() {
     projectName,
     projectMembers,
     projectTags,
+    projectPublic,
   };
 
   const requestOptions = {
@@ -353,6 +355,46 @@ function deleteProjectFromServer(projectId) {
           dropdownContent.style.display === "block" ? "none" : "block";
       }
 
+
+
+
+
+
+function joinProject(button) {
+    const projectElement = button.closest(".project");
+    if (!projectElement) {
+        console.error("프로젝트 요소를 찾을 수 없습니다.");
+        return;
+    }
+
+    const projectId = projectElement.dataset.projectId;
+
+    fetch('/joinProject', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectId: projectId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('프로젝트에 성공적으로 참여했습니다.');
+        } else {
+            alert('프로젝트 참여에 실패했습니다: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('프로젝트 참여 중 오류가 발생했습니다.');
+    });
+}
+    
+
+
+
+
+      
 function goToTodos(element) {
             // 'data-project-id' 속성 값 가져오기
             const projectId = element.getAttribute('data-project-id');
