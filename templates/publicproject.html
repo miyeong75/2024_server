@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>팀 프로젝트 관리</title>
+    <title>공개 프로젝트</title>
     <link rel="stylesheet" href="../static/css/mainpage.css" />
     <link rel="icon" type="image/png" href="../static/images/logo.png" />
-    <script src="../static/js/mainpage.js"></script>
+    <script src="../static/js/projectpublic.js"></script>
   </head>
   <body>
     <header>
@@ -21,12 +21,12 @@
 
     <div class="project-list" id="projectList">
       <h2>
-        팀 프로젝트 리스트
+        공개 프로젝트 리스트
         <button id="add-project-button" onclick="showAddProjectPopup()">
           추가 +
         </button>
-        <button id="public-project-button" onclick="goTopublicproject()">
-          프로젝트 찾기
+        <button id="public-project-button" onclick="goTomainpage()">
+          mainpage
         </button>
 
       </h2>
@@ -43,16 +43,11 @@
           </div>
         </div>
         <div class="dropdown project-options">
-          <button onclick="showDropdown(this)" style="border: none; background-color: transparent">⚙️</button>
-          <div class="dropdown-content">
-            <button onclick="showEditPopup(this)" onmouseover="this.style.backgroundColor='#ccc'"
-              onmouseout="this.style.backgroundColor='#fff'">수정</button>
-            <button onclick="deleteProject(this)" onmouseover="this.style.backgroundColor='#ccc'"
-              onmouseout="this.style.backgroundColor='#fff'">삭제</button>
-          </div>
+          <button onclick="joinProject(this)" class="square-button">참여하기</button>
         </div>
       </div>
       {% endfor %}
+
     </div>
 
     <!-- 수정 팝업창 -->
