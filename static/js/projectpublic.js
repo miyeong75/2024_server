@@ -407,7 +407,7 @@ function goToMypage() {
 }
 
 function goToLogin() {
-  window.location.href = `/loginmain`;
+  window.location.href = `/`;
 }
 
 function goTopublicproject() {

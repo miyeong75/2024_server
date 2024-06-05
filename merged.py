@@ -7,7 +7,7 @@ app = Flask(__name__)
 # 데이터베이스 연결 설정
 db_config = {
     'user': 'root',
-    'password': 'root',
+    'password': '2802',
     'host': 'localhost',
     'database': 'teamteam'
 }
@@ -797,7 +797,7 @@ def edit_boards(project_id, boards_id):
 
 
 #로그인
-@app.route('/loginmain')
+@app.route('/')
 def login2():
     return render_template('login.html')
 

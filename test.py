@@ -765,7 +765,7 @@ def edit_boards(project_id, boards_id):
 
 
 #로그인
-@app.route('/loginmain')
+@app.route('/')
 def login2():
     return render_template('login.html')
 

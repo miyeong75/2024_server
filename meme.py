@@ -686,7 +686,7 @@ def login():
     return resp
 
 
-@app.route('/loginmain')
+@app.route('/')
 def loginmain():
     return render_template('login.html')
 
