@@ -59,7 +59,7 @@ def login():
 
 
 
-@app.route('/loginmain')
+@app.route('/')
 def login2():
     return render_template('login.html')
 
